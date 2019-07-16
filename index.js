@@ -114,7 +114,8 @@ bot.on("message", async message => {
                 let lastActiveChannel = stefan.voiceChannel;
                 let role = message.guild.roles.find((r) => r.id == 600649261281050629);
                 await stefan.addRole(role);
-                stefan.setVoiceChannel(channel)
+                stefan.setVoiceChannel(channel);
+                message.channel.send("Stefan was ulted by a morde for " + (ms(args[0]) || "2m"));
                 setTimeout(() => {
                     stefan.removeRole(role);
                     try {
