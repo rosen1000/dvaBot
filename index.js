@@ -211,44 +211,7 @@ bot.on("message", async message => {
     //     //end xp
     // }
 
-    if (cmd === `${prefix}serverinfo`) {
-        let sicon = message.guild.iconURL;
-        let serverembed = new Discord.RichEmbed()
-            .setDescription("Server info")
-            .setColor(botconfig.color)
-            .setThumbnail(sicon)
-            .addField("Server name", message.guild.name)
-            .addField("Created on", message.guild.createdAt)
-            .addField("You joined", message.member.joinedAt)
-            .addField("Total members", message.guild.memberCount);
-
-        return message.channel.send(serverembed);
-    }
-
-    if (cmd === `${prefix}botinfo`) {
-        let boticon = bot.user.displayAvatarURL;
-        let botembed = new Discord.RichEmbed()
-            .setDescription("Bot info")
-            .setColor("#15f153")
-            .setThumbnail(boticon)
-            .addField("Bot name", bot.user.username, true)
-            .addField("Created on", bot.user.createdAt, true);
-
-        return message.channel.send(botembed);
-    }
-
-    if (cmd === `${prefix}userinfo`) {
-        let user = message.mentions.users.first()
-        if (!user) {
-            return message.channel.send("You didn't specify any user -.-")
-        }
-        let embed = new Discord.RichEmbed()
-            .setAuthor(message.author, message.author.avatarURL)
-            .setColor(botconfig.color)
-            .setThumbnail(user.displayAvatarURL)
-            .title(user.username + '#' + user.discriminator)
-        message.channel.send(embed)
-    }
+    /* info commands rest in piece*/
 
     // if (cmd.startsWith(prefix + "help")) {
     //     if (!args[0]) {
