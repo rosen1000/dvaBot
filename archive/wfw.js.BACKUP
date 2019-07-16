@@ -1,0 +1,22 @@
+const Discord = require("discord.js");
+const botconfig = require("../botconfig.json");
+const snekfetch = require("snekfetch");
+const worldState = require("warframe-worldstate-parser");
+let ws;
+snekfetch.get('https://api.warframestat.us/pc').then(r => {
+    console.log(typeof r)
+    ws = new worldState(r.body).catch(e => {
+        if(e) console.log(e)
+    });
+})
+// const worldStateData = require("request-promise")('http://content.warframe.com/dynamic/worldState.php');
+
+module.exports.run = async (bot, message, args) => {
+    console.log(ws.alerts[0].toString())
+}
+
+module.exports.help = {
+    name : "wfw",
+    desc : "Warframe world",
+    use : "?wfw [type]"
+}

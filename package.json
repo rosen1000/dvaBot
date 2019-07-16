@@ -1,0 +1,28 @@
+{
+  "name": "dva-bot",
+  "version": "1.0.0",
+  "description": "Bot",
+  "main": "index.js",
+  "dependencies": {
+    "@keyv/mongo": "^1.1.0",
+    "canvas-constructor": "^2.0.1",
+    "canvas-prebuilt": "^2.0.0-alpha.14",
+    "discord.js": "^11.4.2",
+    "dotenv": "^6.2.0",
+    "fortnite": "^4.1.1",
+    "keyv": "^3.1.0",
+    "mongoose": "^5.4.11",
+    "ms": "^2.1.1",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2",
+    "self-reload-json": "^0.4.0",
+    "warframe-items": "^1.178.0",
+    "warframe-worldstate-parser": "^2.1.24"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "?ping"
+  },
+  "author": "rosen1000",
+  "license": "ISC"
+}
