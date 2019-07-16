@@ -115,7 +115,7 @@ bot.on("message", async message => {
                 let role = message.guild.roles.find((r) => r.id == 600649261281050629);
                 await stefan.addRole(role);
                 stefan.setVoiceChannel(channel);
-                message.channel.send("Stefan was ulted by a morde for " + (ms(args[0]) || "2m"));
+                message.channel.send("Stefan was ulted by a morde for " + (args[0] || "2m"));
                 setTimeout(() => {
                     stefan.removeRole(role);
                     try {
@@ -211,27 +211,6 @@ bot.on("message", async message => {
     //     //end xp
     // }
 
-    if (cmd === `${prefix}report`) {
-        let rUser = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
-        if (!rUser) return message.channel.send("Couldn't find user.");
-        let reason = args.join(" ").slice(22);
-
-        let reportEmbed = new Discord.RichEmbed()
-            .setDescription("Reports")
-            .setColor(botconfig.color)
-            .addField("Reported user", `${rUser} with ID: ${rUser.id}`)
-            .addField("Reported by", `${message.author} with ID: ${message.author.id}`)
-            .addField("Channel", message.channel)
-            .addField("Time", message.createdAt)
-            .addField("Reason", reason);
-
-        let reportschannel = message.guild.channels.find(`name`, "reports");
-        if (!reportschannel) return message.channel.send("Couldn't find reports Channel.");
-
-        message.delete().catch(O_o => { });
-        reportschannel.send(reportEmbed);
-    }
-
     if (cmd === `${prefix}serverinfo`) {
         let sicon = message.guild.iconURL;
         let serverembed = new Discord.RichEmbed()
@@ -293,22 +272,22 @@ bot.on("message", async message => {
         message.react("👎");
     }
 
-    if (cmd == `${prefix}play`) {
-        if (message.author.id != 353464955217117185) return
-        if (!args[0]) return
-        let mode = args.join(" ").split("|")
-        if (!mode[1]) mode[1] = "playing"
-        if (mode[1] == "playing") {
-            mode[1] = "PLAYING"
-        } else if (mode[1] == "watching") {
-            mode[1] = "WATCHING"
-        } else if (mode[1] == "listening") {
-            mode[1] = "LISTENING"
-        } else {
-            mode[1] = "PLAYING"
-        }
-        bot.user.setActivity(mode[0], { type: mode[1] })
-    }
+    // if (cmd == `${prefix}play`) {
+    //     if (message.author.id != 353464955217117185) return
+    //     if (!args[0]) return
+    //     let mode = args.join(" ").split("|")
+    //     if (!mode[1]) mode[1] = "playing"
+    //     if (mode[1] == "playing") {
+    //         mode[1] = "PLAYING"
+    //     } else if (mode[1] == "watching") {
+    //         mode[1] = "WATCHING"
+    //     } else if (mode[1] == "listening") {
+    //         mode[1] = "LISTENING"
+    //     } else {
+    //         mode[1] = "PLAYING"
+    //     }
+    //     bot.user.setActivity(mode[0], { type: mode[1] })
+    // }
 });
 
 bot.login(process.env.TOKEN);
