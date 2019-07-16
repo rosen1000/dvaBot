@@ -9,9 +9,9 @@ bot.commands = new Discord.Collection();
 // let xp = require("./xp.json");
 require("dotenv").config();
 
-const mongoose = require("mongoose");
-mongoose.connect(process.env.DB);
-const User = require("./models/user.js");
+// const mongoose = require("mongoose");
+// mongoose.connect(process.env.DB);
+// const User = require("./models/user.js");
 
 fs.readdir("./commands/", (err, files) => {
     if (err) console.log(err);
@@ -109,8 +109,22 @@ bot.on("message", async message => {
         if (cmd == `${prefix}stefan`) {
             let stefan = message.guild.members.find(u => u.id == 352641880581996547);
             let channel = message.guild.channels.find(ch => ch.id == 592430973421879310);
+            if (!stefan) return message.channel.send("stefan is not existend");
             if (stefan.voiceChannel) {
+                let lastActiveChannel = stefan.voiceChannel;
+                let role = message.guild.roles.find((r) => r.id == 600649261281050629);
+                await stefan.addRole(role);
                 stefan.setVoiceChannel(channel)
+                setTimeout(() => {
+                    stefan.removeRole(role);
+                    try {
+                        stefan.setVoiceChannel(lastActiveChannel);
+                    } catch(e) {
+                        message.channel.send(stefan + " are da se vryshtash tuka >:(");
+                    }
+                }, ms(args[0] || ms("2m")));
+            } else {
+                message.channel.send("He's not in FUCKING VC.");
             }
         }
     }
