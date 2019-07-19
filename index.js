@@ -108,22 +108,28 @@ bot.on("message", async message => {
     if (message.guild.id == 556540661843886092) {
         if (cmd == `${prefix}stefan`) {
             let stefan = message.guild.members.find(u => u.id == 352641880581996547);
-            let channel = message.guild.channels.find(ch => ch.id == 592430973421879310);
             if (!stefan) return message.channel.send("stefan is not existend");
+            let channel = message.guild.channels.find(ch => ch.id == 597147754900357140);
+            let oldRoles = stefan.roles;
+            await stefan.removeRoles(stefan.roles);
+            let time = args[0];
+            if (!time) time = "2m";
             if (stefan.voiceChannel) {
                 let lastActiveChannel = stefan.voiceChannel;
                 let role = message.guild.roles.find((r) => r.id == 600649261281050629);
                 await stefan.addRole(role);
                 stefan.setVoiceChannel(channel);
-                message.channel.send("Stefan was ulted by a morde for " + (args[0] || "2m"));
+                message.channel.send("Stefan was ulted by The Lord of Death, Mordekaiser for " + time);
                 setTimeout(() => {
                     stefan.removeRole(role);
+                    stefan.addRoles(oldRoles);
                     try {
                         stefan.setVoiceChannel(lastActiveChannel);
+                        message.channel.send("He has returned.");
                     } catch(e) {
                         message.channel.send(stefan + " are da se vryshtash tuka >:(");
                     }
-                }, ms(args[0] || ms("2m")));
+                }, ms(time));
             } else {
                 message.channel.send("He's not in FUCKING VC.");
             }
