@@ -32,18 +32,18 @@ module.exports.run = async (bot, message, args) => {
             .setTitle('📖 Help')
             .setColor(botconfig.color)
             .addField('Categories:',
-                `Admin Commands (${admin.length})
-                Anilist Commands (${anilist.length})
-                Economy Commands (${economy.length})
-                Fun Commands (${fun.length})
-                Image Commands (${image.length})
-                Meta Commands (${meta.length})
-                Mod Commands (${mod.length})
-                Reaction Commands (${reaction.length})
-                Shop Commands (${shop.length})
-                Social Commands (${social.length})
-                Trading Commands (${trading.length})
-                Utility Commands (${utility.length})`);
+                `1: Admin Commands (${admin.length})
+                2: Anilist Commands (${anilist.length})
+                3: Economy Commands (${economy.length})
+                4: Fun Commands (${fun.length})
+                5: Image Commands (${image.length})
+                6: Meta Commands (${meta.length})
+                7: Mod Commands (${mod.length})
+                8: Reaction Commands (${reaction.length})
+                9: Shop Commands (${shop.length})
+                10: Social Commands (${social.length})
+                11: Trading Commands (${trading.length})
+                12: Utility Commands (${utility.length})`);
         let loadingEmbed = new Discord.RichEmbed()
             .setTitle('Loading help embed, please wait...')
             .setColor("ffff00");
@@ -66,7 +66,7 @@ module.exports.run = async (bot, message, args) => {
             } else if (reactions.emoji.name == emojis[2]) {
                 if (index < emojis.length - 1) index++;
             } else if (reactions.emoji.name == emojis[3]) {
-                index = emojis.length - 1;
+                index = 12;
             } else {
                 let awaitMessage = await message.channel.send("Select page from 0 to 12");
                 const filter = m => m.author.id == message.author.id;
@@ -89,96 +89,95 @@ module.exports.run = async (bot, message, args) => {
                 });
             }
             delete embed;
-            let emoji = ":black_square_button:";
             switch (index) {
                 case 0:
                     embed = new Discord.RichEmbed()
                         .setTitle('📖 Help')
                         .addField('Categories:',
-                            `Admin Commands (${admin.length})
-                            Anilist Commands (${anilist.length})
-                            Economy Commands (${economy.length})
-                            Fun Commands (${fun.length})
-                            Image Commands (${image.length})
-                            Meta Commands (${meta.length})
-                            Mod Commands (${mod.length})
-                            Reaction Commands (${reaction.length})
-                            Shop Commands (${shop.length})
-                            Social Commands (${social.length})
-                            Trading Commands (${trading.length})
-                            Utility Commands (${utility.length})`);
+                            `1: Admin Commands (${admin.length})
+                            2: Anilist Commands (${anilist.length})
+                            3: Economy Commands (${economy.length})
+                            4: Fun Commands (${fun.length})
+                            5: Image Commands (${image.length})
+                            6: Meta Commands (${meta.length})
+                            7: Mod Commands (${mod.length})
+                            8: Reaction Commands (${reaction.length})
+                            9: Shop Commands (${shop.length})
+                            10: Social Commands (${social.length})
+                            11: Trading Commands (${trading.length})
+                            12: Utility Commands (${utility.length})`);
                     break;
                 case 1:
                     embed = new Discord.RichEmbed()
                         .setTitle('📖 Help >> Admin')
                         .setDescription("Server managment commands")
-                        .addField("Commands", admin.map(cmd => `${emoji} ${cmd.name}: ${cmd.desc}`));
+                        .addField("Commands", map(bot, admin));
                     break;
                 case 2:
                     embed = new Discord.RichEmbed()
                         .setTitle('📖 Help >> Anilist')
                         .setDescription("Anime image searches")
-                        .addField("Commands", anilist.map(cmd => `${emoji} ${cmd.name}: ${cmd.desc}`));
+                        .addField("Commands", map(bot, anilist));
                     break;
                 case 3:
                     embed = new Discord.RichEmbed()
                         .setTitle('📖 Help >> Economy')
                         .setDescription("Economy related commands. For example coins or doritos")
-                        .addField("Commands:", economy.map(cmd => `${emoji} ${cmd.name}: ${cmd.desc}`));
+                        .addField("Commands:", map(bot, economy));
                     break;
                 case 4:
                     embed = new Discord.RichEmbed()
                         .setTitle('📖 Help >> Fun')
                         .setDescription("I'll try my best to entertain you :)")
-                        .addField("Commands:", fun.map(cmd => `${emoji} ${cmd.name}: ${cmd.desc}`));
+                        .addField("Commands:", map(bot, fun));
                     break;
                 case 5:
                     embed = new Discord.RichEmbed()
                         .setTitle('📖 Help >> Image')
                         .setDescription("I can search images too, not only you have acsess to google.. b-baka >~<")
-                        .addField("Commands:", image.map(cmd => `${emoji} ${cmd.name}: ${cmd.desc}`));
+                        .addField("Commands:", map(bot, image));
                     break;
                 case 6:
                     embed = new Discord.RichEmbed()
                         .setTitle('📖 Help >> Meta')
                         .setDescription("Commands closeley-related to the bot")
-                        .addField("Commands:", meta.map(cmd => `${emoji} ${cmd.name}: ${cmd.desc}`));
+                        .addField("Commands:", map(bot, meta));
                     break;
                 case 7:
                     embed = new Discord.RichEmbed()
                         .setTitle('📖 Help >> Mod')
                         .setDescription("Some moderation commands regarding the server itself")
-                        .addField("Commands:", mod.map(cmd => `${emoji} ${cmd.name}: ${cmd.desc}`));
+                        .addField("Commands:", map(bot, mod));
                     break;
                 case 8:
                     embed = new Discord.RichEmbed()
                         .setTitle('📖 Help >> Reaction')
                         .setDescription("Image-anime-reaction commands like one good swap to give someone some logic")
-                        .addField("Commands:", reaction.map(cmd => `${emoji} ${cmd.name}: ${cmd.desc}`));
+                        .addField("Commands:", map(bot, reaction));
                     break;
                 case 9:
                     embed = new Discord.RichEmbed()
                         .setTitle('📖 Help >> Shop')
                         .setDescription("Shop some cool items")
-                        .addField("Commands:", shop.map(cmd => `${emoji} ${cmd.name}: ${cmd.desc}`));
+                        .addField("Commands:", map(bot, shop));
                     break;
                 case 10:
                     embed = new Discord.RichEmbed()
                         .setTitle('📖 Help >> Social')
                         .setDescription("For your special social needs")
-                        .addField("Commands:", social.map(cmd => `${emoji} ${cmd.name}: ${cmd.desc}`));
+                        .addField("Commands:", map(bot, social));
                     break;
                 case 11:
                     embed = new Discord.RichEmbed()
                         .setTitle('📖 Help >> Trading')
                         .setDescription("For trading items got from shop or other methods")
-                        .addField("Commands:", trading.map(cmd => `${emoji} ${cmd.name}: ${cmd.desc}`));
+                        .addField("Commands:", map(bot, trading));
                     break;
                 case 12:
                     embed = new Discord.RichEmbed()
                         .setTitle('📖 Help >> Utility')
                         .setDescription("Some self commands")
-                        .addField("Commands:", utility.map(cmd => `${emoji} ${cmd.name}: ${cmd.desc}`));
+                        .addField("Commands:", map(bot, utility));
                     break;
                 default:
                     return message.channel.send("Error while getting page, please contact dev via DM (Hax0r404#2104) or using ?bugreport command");
@@ -211,6 +210,12 @@ let find = function (bot, args) {
             output.push(commands[i].help);
         }
     }
+    return output;
+}
+let map = function (bot, variable) {
+    if (variable.length == 0) return "No commands found!";
+    let emoji = "🔲";
+    let output = variable.map(cmd => `${emoji} ${cmd.name}: ${cmd.desc}`);
     return output;
 }
 
