@@ -46,18 +46,18 @@ module.exports.run = async (bot, message, args) => {
                 Utility Commands (${utility.length})`);
         let loadingEmbed = new Discord.RichEmbed()
             .setTitle('Loading help embed, please wait...')
-            .setColor('yellow');
+            .setColor("ffff00");
         let msg = await message.channel.send(loadingEmbed);
         await msg.react('⏮');
         await msg.react('◀');
         await msg.react('▶');
         await msg.react('⏭');
         await msg.react('🔢');
-        msg.edit(embed);
         let index = 0;
         const emojis = ['⏮', '◀', '▶', '⏭', '🔢'];
         const filter = (r, u) => emojis.includes(r.emoji.name) && u.id == message.author.id;
         const collector = msg.createReactionCollector(filter);
+        msg.edit(embed).then(reset(collector, msg));
         collector.on("collect", async (reaction, coll) => {
             if (reaction.emoji.name == emojis[0]) {
                 index = 0;
@@ -167,9 +167,8 @@ module.exports.run = async (bot, message, args) => {
                     return message.channel.send("Error while getting page, please contact dev via DM (Hax0r404#2104) or using ?bugreport command");
             }
             embed.setColor(botconfig.color);
-            msg.edit(embed);
             reaction.remove(message.author);
-            reset(coll, msg);
+            msg.edit(embed).then(m => reset(coll, m));
         });
     }
 }
@@ -178,15 +177,14 @@ let timer;
 let reset = function (collector, msg) {
     clearTimeout(timer);
     timer = setTimeout(() => {
-        console.log(msg.embeds[0]);
         embed = new Discord.RichEmbed()
-            .setTitle(msg.title)
-            .addField(msg.fields[0].name, msg.fields[0].value)
+            .setTitle(msg.embeds[0].title)
+            .addField(msg.embeds[0].fields[0].name, msg.embeds[0].fields[0].value)
             .setColor('black');
         msg.clearReactions();
         msg.edit(embed);
         collector.stop();
-    }, 20000);
+    }, 60000);
 }
 let find = function (bot, args) {
     let output = [];
