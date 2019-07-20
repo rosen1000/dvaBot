@@ -58,14 +58,14 @@ module.exports.run = async (bot, message, args) => {
         const filter = (r, u) => emojis.includes(r.emoji.name) && u.id == message.author.id;
         const collector = msg.createReactionCollector(filter);
         msg.edit(embed).then(reset(collector, msg));
-        collector.on("collect", async (reaction, coll) => {
-            if (reaction.emoji.name == emojis[0]) {
+        collector.on("collect", async (reactions, coll) => {
+            if (reactions.emoji.name == emojis[0]) {
                 index = 0;
-            } else if (reaction.emoji.name == emojis[1]) {
+            } else if (reactions.emoji.name == emojis[1]) {
                 if (index > 0) index--;
-            } else if (reaction.emoji.name == emojis[2]) {
+            } else if (reactions.emoji.name == emojis[2]) {
                 if (index < emojis.length - 1) index++;
-            } else if (reaction.emoji.name == emojis[3]) {
+            } else if (reactions.emoji.name == emojis[3]) {
                 index = emojis.length - 1;
             } else {
                 let awaitMessage = await message.channel.send("Select page from 0 to 12");
@@ -184,7 +184,7 @@ module.exports.run = async (bot, message, args) => {
                     return message.channel.send("Error while getting page, please contact dev via DM (Hax0r404#2104) or using ?bugreport command");
             }
             embed.setColor(botconfig.color);
-            reaction.remove(message.author);
+            reactions.remove(message.author);
             msg.edit(embed).then(m => reset(coll, m));
         });
     }
