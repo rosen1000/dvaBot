@@ -68,9 +68,26 @@ module.exports.run = async (bot, message, args) => {
             } else if (reaction.emoji.name == emojis[3]) {
                 index = emojis.length - 1;
             } else {
-                //select page
+                let awaitMessage = await message.channel.send("Select page from 0 to 12");
+                const filter = m => m.author.id == message.author.id;
+                await message.channel.awaitMessages(filter, { max: 1, time: 60000, errors: ["time"] }).then(collected => {
+                    let number = parseInt(collected.first().content);
+                    if (number == NaN) return message.channel.send("That's not a number").then(msg => { collected.first().delete(3000); awaitMessage.delete(3000) });
+                    if (number > 12) return message.channel.send("Page can't be more than the maximum (12)").then(msg => { collected.first().delete(3000); awaitMessage.delete(3000) });
+                    if (number < 0) return message.channel.send("Page can't be less than the minimum (0 for main page)").then(msg => { collected.first().delete(3000); awaitMessage.delete(3000) });
+                    index = number;
+                    message.channel.send("Done!").then(m => {
+                        m.delete(3000);
+                        collected.first().delete(3000);
+                        awaitMessage.delete(3000);
+                    });
+                }).catch(collected => {
+                    message.channel.send("Time ran out!").then(m => {
+                        m.delete(3000);
+                        awaitMessage.delete();
+                    });
+                });
             }
-
             delete embed;
             let emoji = ":black_square_button:";
             switch (index) {
