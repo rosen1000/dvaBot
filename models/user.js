@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+// DEPRECATED: will be removed in near future!
 const userSchema = mongoose.Schema({
     userID: String,
     serverID: String,
