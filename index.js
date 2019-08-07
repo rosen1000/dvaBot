@@ -75,20 +75,17 @@ bot.on("guildMemberRemove", async member => {
     welcomeChannel.send(`${member.user.username} has departed to Auir!`)
 })
 
-// let money = [
-//     {
-//         "id": 12343289465752,
-//         "legal": false
-//     },
-//     {
-//         "id": 9312745245724,
-//         legal: true
-//     },
-//     {
-//         id: 1398456701934,
-//         legal: false
-//     }
-// ]
+//Personal, disconnect owner on specific user voice chat join
+bot.on("voiceStateUpdate", async (oldMember, newMember) => {
+    if (newMember.guild.id == 556540661843886092) {
+        if (newMember.id == 352641880581996547) {
+            let rosen = newMember.guild.members.find(m => m.id == 353464955217117185);
+            if (rosen.voiceChannel) {
+                rosen.setVoiceChannel(null);
+            }
+        }
+    }
+});
 
 bot.on("message", async message => {
     if (message.author.bot) return;
@@ -126,13 +123,25 @@ bot.on("message", async message => {
                     try {
                         stefan.setVoiceChannel(lastActiveChannel);
                         message.channel.send("He has returned.");
-                    } catch(e) {
+                    } catch (e) {
                         message.channel.send(stefan + " are da se vryshtash tuka >:(");
                     }
                 }, ms(time));
             } else {
                 message.channel.send("He's not in FUCKING VC.");
             }
+        }
+    }
+
+    //Person specific commands
+    if (message.author.id == 353464955217117185) {
+        if (cmd == prefix + "ignore") {
+            let my_settings = require("./rosen-settings.json");
+            my_settings.ignore = !my_settings.ignore
+            fs.writeFile("./rosen-settings.json", JSON.stringify(my_settings), (err) => {
+                if (err) console.error(err);
+            })
+            message.channel.send("Changed: " + my_settings.ignore);
         }
     }
 
