@@ -31,11 +31,28 @@ fs.readdir("./commands/", (err, files) => {
 });
 
 bot.on("ready", async () => {
-    const status = require('./statuses.json');
     console.log(`${bot.user.username} is online in ${bot.guilds.size} servers ^^`);
-    // bot.user.setPresence({game: {name: "test"}, status: "invisible"});
-    bot.user.setActivity("youtube", { type: "WATCHING" })
-    //bot.user.setActivity("Overwatch");
+
+    const statuses = require('./statuses.json');
+    bot.user.setActivity("youtube", { type: "WATCHING" });
+
+    setInterval(() => {
+        let status;
+        do {
+            status = statuses[Math.floor(Math.random() * statuses.length)];
+        } while (status.status == bot.user.presence.status); 
+        let regex = /\{{2}(.+)\}{2}/;
+        let text;
+        if (regex.test(status.status)) {
+            text = status.status.replace(/\{{2}(.+)\}{2}/, function (match, p1) {
+                let [prop, key] = p1.split(".");
+                return bot[prop][key];
+            });
+        } else {
+            text = status.status;
+        }
+        bot.user.setActivity(text, { type: status.type });
+    }, ms("30m"));
 });
 
 //events
@@ -71,7 +88,7 @@ bot.on("guildMemberAdd", async member => {
 
 bot.on("guildMemberRemove", async member => {
     if (!member.guild.id == "461428273943937044") return;
-    let welcomeChannel = member.guild.channels.find(`name`, "welcome");
+    let welcomeChannel = member.guild.channels.find(ch => ch.name == "welcome");
     if (!welcomeChannel) return;
     welcomeChannel.send(`${member.user.username} has departed to Auir!`)
 })

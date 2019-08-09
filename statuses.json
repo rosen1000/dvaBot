@@ -1,26 +1,30 @@
-{
-    "1": {
-        "status": "in ${serversize}",
+[
+    {
+        "status": "in {{guilds.size}}",
         "type": "PLAYING"
     },
-    "2": {
-        "status": "with rosen <3",
-        "type": "PLAYING"
-    },
-    "3": {
-        "status": "banning Starside",
-        "type": "PLAYING"
-    },
-    "4": {
+    {
         "status": "youtube",
         "type": "WATCHING"
     },
-    "5": {
+    {
         "status": "Overwatch",
         "type": "PLAYING"
     },
-    "6": {
+    {
         "status": "good music",
         "type": "LISTENING"
+    },
+    {
+        "status": "with big goth anime tiddies",
+        "type": "PLAYING"
+    },
+    {
+        "status": "t̑͜͞h̾͑ͫe͋̌̆ ̵͚̿v̆̌̂oͣͤ́ḯ͌̈́d̆ͯͬ",
+        "type": "LISTENING"
+    },
+    {
+        "status": "大きなお世話",
+        "type": "PLAYING"
     }
-}
+]
