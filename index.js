@@ -4,6 +4,7 @@ const Discord = require("discord.js");
 const fs = require("fs");
 const ms = require("ms");
 const bot = new Discord.Client({ disableEveryone: true });
+const zalgo = require("to-zalgo");
 bot.commands = new Discord.Collection();
 // let coins = require("./coins.json", "utf8");
 // let xp = require("./xp.json");
@@ -142,6 +143,13 @@ bot.on("message", async message => {
                 if (err) console.error(err);
             })
             message.channel.send("Changed: " + my_settings.ignore);
+        }
+        if (cmd == prefix + "void") {
+            let evil = args.join(" ");
+            evil = zalgo(evil);
+            if (!evil) return console.error("No arguments on command 'void'");
+            message.delete();
+            message.channel.send(evil);
         }
     }
 
