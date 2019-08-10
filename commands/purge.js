@@ -11,8 +11,10 @@ module.exports.run = async (bot, message, args) => {
 
   if(number > 100) return message.channel.send("Can't delete more than 100 messages at once >~< blame discord API")
 
-  message.channel.bulkDelete(number).then(message.channel.send(`Purged ${number} messages`).then(msg => msg.delete(3500)));
   message.delete()
+  message.channel.bulkDelete(number)
+    .then(message.channel.send(`Purged ${number} messages`).then(msg => msg.delete(3500)))
+    .catch(message.channel.send("Error ocured"));
 }
 
 module.exports.help = {
