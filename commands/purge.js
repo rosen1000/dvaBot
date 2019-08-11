@@ -14,7 +14,7 @@ module.exports.run = async (bot, message, args) => {
   message.delete()
   message.channel.bulkDelete(number)
     .then(message.channel.send(`Purged ${number} messages`).then(msg => msg.delete(3500)))
-    .catch(message.channel.send("Error ocured"));
+    .catch(e => { if (e) message.channel.send("Error ocured") });
 }
 
 module.exports.help = {
