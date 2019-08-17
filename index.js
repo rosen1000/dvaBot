@@ -93,18 +93,6 @@ bot.on("guildMemberRemove", async member => {
     welcomeChannel.send(`${member.user.username} has departed to Auir!`)
 })
 
-//Personal, disconnect owner on specific user voice chat join
-bot.on("voiceStateUpdate", async (oldMember, newMember) => {
-    if (newMember.guild.id == 556540661843886092) {
-        if (newMember.id == 352641880581996547) {
-            let rosen = newMember.guild.members.find(m => m.id == 353464955217117185);
-            if (rosen.voiceChannel) {
-                rosen.setVoiceChannel(null);
-            }
-        }
-    }
-});
-
 bot.on("message", async message => {
     if (message.author.bot) return;
     if (message.channel.type === "dm") return;
