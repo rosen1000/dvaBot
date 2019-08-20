@@ -138,6 +138,100 @@ bot.on("message", async message => {
             }
         }
     }
+    if (message.guild.id == 609041726094704665) {
+        let punish = async function (msg, reason) {
+            let member = msg.guild.member(msg.author);
+            let currentRole = member.roles.find(r => r.includes("strike"));
+            let nextLevel = currentRole.name.charAt(7)++;
+            let warningChannel = msg.guild.channels.find(ch => ch.id == 613074138596376576);
+            let embed;
+
+            if (nextLevel < 4) {
+                msg.author.send("Your message `" + msg.content + "` was flagged for spam with reason `" + reason + "` and was deleted" +
+                    "\nif you think the punishment is not used correctly you can contact the server owner");
+                embed = new Discord.RichEmbed()
+                    .setTitle("Warning")
+                    .addField("Rule breaker", msg.author)
+                    .addField("Executor", bot.user)
+                    .addField("Reason", reason + " (automatic defence)")
+                    .setColor(botconfig.color)
+                    .setThumbnail(msg.author.avatarURL);
+            } else if (nextLevel == 4) {
+                let muteRole = msg.guild.roles.find(r => r.name == "muted");
+                if (!muteRole) {
+                    try {
+                        muteRole = await msg.guild.createRole({
+                            name: "muted",
+                            color: botconfig.black,
+                            permission: []
+                        });
+                        msg.guild.forEach(async (channel, id) => {
+                            await channel.overwritePermissions(muteRole, {
+                                SEND_MESSSAGES: false,
+                                ADD_REACTIONS: false
+                            });
+                        });
+                    } catch (e) {
+                        if (e) console.log(e.stack);
+                    }
+                }
+
+                await msg.author.addRole(muteRole);
+                msg.channel.send(msg.author + " has been muted due to multiple rule breaks for one day");
+
+                setTimeout(() => {
+                    msg.author.removeRole(muteRole);
+                    msg.author.send("You have been unmuted in " + msg.guild.name);
+                }, ms("1d"));
+
+                embed = new Discord.RichEmbed()
+                    .setTitle("Mute")
+                    .addField("Rule breaker", msg.author)
+                    .addField("Executor", bot.user)
+                    .addField("Reason", reason + " (automatic defence)")
+                    .setColor(botconfig.color)
+                    .setThumbnail(msg.author.avatarURL);
+            } else if (level >= 5) {
+                let invite = "https://discord.gg/7DSnwpT"
+                msg.author.send("You have been kicked for `" + reason + "` if you want to return use this link");
+                msg.author.send(invite);
+                msg.author.kick(reason);
+                embed = new Discord.RichEmbed()
+                    .setTitle("Kick with reinvite")
+                    .addField("Rule breaker", msg.author)
+                    .addField("Executor", bot.user)
+                    .addField("Reason", reason + " (automatic defence)")
+                    .setThumbnail(msg.author.avatarURL);
+                return warningChannel.send(embed);
+            }
+
+            warningChannel.send(embed)
+
+            await member.removeRole(currentRole);
+            await member.addRole(msg.guild.roles.find(r => r.name == "strike " + level))
+        }
+        //Spam detection
+        let ignoredIDs = [609049231839199264, 613064164335812617, 613064796564094976, 613064164335812617, 609063485086761031]
+        if (!ignoredIDs.includes(message.channel.id)) {
+            if (message.member.roles.find(r => r.name.includes("Admin"))) return;
+            let nonNormal = 0;
+            let CAPS = 0;
+            let seventyProcent = (message.content.length * 7) / 10;
+
+            for (let i = 0; i < message.content.length; i++) {
+                if (message.content.charCodeAt(i) > 255) nonNormal++;
+                if (message.content.charCodeAt(i) >= 65 && message.content.charCodeAt(i) <= 90) CAPS++;
+            }
+
+            if (nonNormal > seventyProcent) {
+                message.delete();
+                punish(message, "usage of non ascii symbols");
+            } else if (CAPS > seventyProcent && message.content.length > 8) {
+                message.delete();
+                punish(message, "CAPS lock");
+            }
+        }
+    }
 
     //Person specific commands
     if (message.author.id == 353464955217117185) {
