@@ -141,7 +141,7 @@ bot.on("message", async message => {
     if (message.guild.id == 609041726094704665) {
         let punish = async function (msg, reason) {
             let member = msg.guild.member(msg.author);
-            let currentRole = member.roles.find(r => r.includes("strike"));
+            let currentRole = member.roles.find(r => r.name.includes("strike"));
             let nextLevel = currentRole.name.charAt(7)++;
             let warningChannel = msg.guild.channels.find(ch => ch.id == 613074138596376576);
             let embed;
