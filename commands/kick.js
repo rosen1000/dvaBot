@@ -19,7 +19,7 @@ module.exports.run = async (bot, message, args) => {
         .addField('reason:', reason);
 
     message.guild.member(kUser).kick(reason);
-    message.channel.send(`${kUser} has been kicked`)
+    message.channel.send(`${kUser.user.username} has been kicked`)
 
     let channel = message.guild.channel.find(ch => ch.name == "incidents");
     if (!channel) return;

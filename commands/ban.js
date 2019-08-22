@@ -11,7 +11,7 @@ module.exports.run = async (bot, message, args) => {
   if (!bUser.bannable) return message.channel.send("I can't ban him tho")
 
   message.guild.member(bUser).ban(bReason);
-  message.channel.send(`Banned ${bUser.username}`)
+  message.channel.send(`Banned ${bUser.user.username}`)
 
   let channel = message.guild.channel.find(ch => ch.name == "incidents");
   if (!channel) return;
