@@ -224,10 +224,8 @@ bot.on("message", async message => {
             }
 
             if (nonNormal > seventyProcent) {
-                message.delete();
                 punish(message, "usage of non ascii symbols");
             } else if (CAPS > seventyProcent && message.content.length > 8) {
-                message.delete();
                 punish(message, "CAPS lock");
             }
         }
