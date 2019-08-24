@@ -211,7 +211,7 @@ bot.on("message", async message => {
             await member.addRole(msg.guild.roles.find(r => r.name == "strike " + level))
         }
         //Spam detection
-        let ignoredIDs = [609049231839199264, 613064164335812617, 613064796564094976, 613064164335812617, 609063485086761031]
+        let ignoredIDs = [609049231839199264, 613064164335812617, 613064796564094976, 613064164335812617, 609063485086761031, 610565473502756901]
         if (!ignoredIDs.includes(message.channel.id)) {
             if (message.member.roles.find(r => r.name.includes("Admin"))) return;
             let nonNormal = 0;
