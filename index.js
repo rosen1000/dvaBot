@@ -5,13 +5,8 @@ const fs = require("fs");
 const ms = require("ms");
 const bot = new Discord.Client({ disableEveryone: true });
 bot.commands = new Discord.Collection();
-// let coins = require("./coins.json", "utf8");
-// let xp = require("./xp.json");
 require("dotenv").config();
-
-// const mongoose = require("mongoose");
-// mongoose.connect(process.env.DB);
-// const User = require("./models/user.js");
+// const dataBase = require("./models/keyv.js");
 
 fs.readdir("./commands/", (err, files) => {
     if (err) console.log(err);
@@ -39,14 +34,17 @@ bot.on("ready", async () => {
 
 //events
 bot.on("guildMemberAdd", async member => {
-    if (!member.guild.id == "461428273943937044") return;
-    console.log(`${member.id} joined the server!`);
-    if (!member.user.bot) {
-        try {
-            member.send(`Welcome to **${member.guild.name}**! GLHF`)
-        } catch (e) { }
+    //Eva's server
+    if (member.guild.id == 514125758751440896) {
+        let welcomeChannel = member.guild.channels.find(ch => ch.id == 514125758751440900);
+        if (!welcomeChannel) return;
+        
+        let rulesChannel = member.guild.channels.find(ch => ch.id == 519828142370586625);
+        let introductionChannel = member.guild.channels.find(ch => ch.id == 604352341726199838);
+        console.log(welcomeChannel.guild.channels.find(ch => ch.id == "514125758751440900"))
+        welcomeChannel.guild.channels.find(ch => ch.id == 514125758751440900).send(`Welcome ${member} Make sure to read and follow the ${rulesChannel} and introduce yourself in ${introductionChannel}. Have a great time!`);
+        return;
     }
-
     let memberrole = member.guild.roles.find(r => r.name == "Members");
     let botrole = member.guild.roles.find(r => r.name == "BOTS");
     if (memberrole) {
@@ -70,25 +68,10 @@ bot.on("guildMemberAdd", async member => {
 
 bot.on("guildMemberRemove", async member => {
     if (!member.guild.id == "461428273943937044") return;
-    let welcomeChannel = member.guild.channels.find(`name`, "welcome");
+    let welcomeChannel = member.guild.channels.find(ch => ch.name == "welcome");
     if (!welcomeChannel) return;
     welcomeChannel.send(`${member.user.username} has departed to Auir!`)
 })
-
-// let money = [
-//     {
-//         "id": 12343289465752,
-//         "legal": false
-//     },
-//     {
-//         "id": 9312745245724,
-//         legal: true
-//     },
-//     {
-//         id: 1398456701934,
-//         legal: false
-//     }
-// ]
 
 bot.on("message", async message => {
     if (message.author.bot) return;
@@ -240,23 +223,10 @@ bot.on("message", async message => {
         message.react("👍");
         message.react("👎");
     }
-
-    // if (cmd == `${prefix}play`) {
-    //     if (message.author.id != 353464955217117185) return
-    //     if (!args[0]) return
-    //     let mode = args.join(" ").split("|")
-    //     if (!mode[1]) mode[1] = "playing"
-    //     if (mode[1] == "playing") {
-    //         mode[1] = "PLAYING"
-    //     } else if (mode[1] == "watching") {
-    //         mode[1] = "WATCHING"
-    //     } else if (mode[1] == "listening") {
-    //         mode[1] = "LISTENING"
-    //     } else {
-    //         mode[1] = "PLAYING"
-    //     }
-    //     bot.user.setActivity(mode[0], { type: mode[1] })
-    // }
 });
+
+function giveXP(user) {
+    
+}
 
 bot.login(process.env.TOKEN);
