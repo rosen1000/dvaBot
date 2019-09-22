@@ -4,6 +4,7 @@ const Discord = require("discord.js");
 const fs = require("fs");
 const ms = require("ms");
 const bot = new Discord.Client({ disableEveryone: true });
+const zalgo = require("to-zalgo");
 bot.commands = new Discord.Collection();
 require("dotenv").config();
 // const dataBase = require("./models/keyv.js");
@@ -25,11 +26,28 @@ fs.readdir("./commands/", (err, files) => {
 });
 
 bot.on("ready", async () => {
-    const status = require('./statuses.json');
     console.log(`${bot.user.username} is online in ${bot.guilds.size} servers ^^`);
-    // bot.user.setPresence({game: {name: "test"}, status: "invisible"});
-    bot.user.setActivity("youtube", { type: "WATCHING" })
-    //bot.user.setActivity("Overwatch");
+
+    const statuses = require('./statuses.json');
+    bot.user.setActivity("youtube", { type: "WATCHING" });
+
+    setInterval(() => {
+        let status;
+        do {
+            status = statuses[Math.floor(Math.random() * statuses.length)];
+        } while (status.status == bot.user.presence.status); 
+        let regex = /\{{2}(.+)\}{2}/;
+        let text;
+        if (regex.test(status.status)) {
+            text = status.status.replace(/\{{2}(.+)\}{2}/, function (match, p1) {
+                let [prop, key] = p1.split(".");
+                return bot[prop][key];
+            });
+        } else {
+            text = status.status;
+        }
+        bot.user.setActivity(text, { type: status.type });
+    }, ms("30m"));
 });
 
 //events
@@ -109,13 +127,124 @@ bot.on("message", async message => {
                     try {
                         stefan.setVoiceChannel(lastActiveChannel);
                         message.channel.send("He has returned.");
-                    } catch(e) {
+                    } catch (e) {
                         message.channel.send(stefan + " are da se vryshtash tuka >:(");
                     }
                 }, ms(time));
             } else {
                 message.channel.send("He's not in FUCKING VC.");
             }
+        }
+    }
+    if (message.guild.id == 609041726094704665) {
+        let punish = async function (msg, reason) {
+            let member = msg.guild.member(msg.author);
+            let currentRole = member.roles.find(r => r.name.includes("strike"));
+            let nextLevel = currentRole.name.charAt(7)++;
+            let warningChannel = msg.guild.channels.find(ch => ch.id == 613074138596376576);
+            let embed;
+
+            if (nextLevel < 4) {
+                msg.author.send("Your message `" + msg.content + "` was flagged for spam with reason `" + reason + "` and was deleted" +
+                    "\nif you think the punishment is not used correctly you can contact the server owner");
+                embed = new Discord.RichEmbed()
+                    .setTitle("Warning")
+                    .addField("Rule breaker", msg.author)
+                    .addField("Executor", bot.user)
+                    .addField("Reason", reason + " (automatic defence)")
+                    .setColor(botconfig.color)
+                    .setThumbnail(msg.author.avatarURL);
+            } else if (nextLevel == 4) {
+                let muteRole = msg.guild.roles.find(r => r.name == "muted");
+                if (!muteRole) {
+                    try {
+                        muteRole = await msg.guild.createRole({
+                            name: "muted",
+                            color: botconfig.black,
+                            permission: []
+                        });
+                        msg.guild.forEach(async (channel, id) => {
+                            await channel.overwritePermissions(muteRole, {
+                                SEND_MESSSAGES: false,
+                                ADD_REACTIONS: false
+                            });
+                        });
+                    } catch (e) {
+                        if (e) console.log(e.stack);
+                    }
+                }
+
+                await msg.author.addRole(muteRole);
+                msg.channel.send(msg.author + " has been muted due to multiple rule breaks for one day");
+
+                setTimeout(() => {
+                    msg.author.removeRole(muteRole);
+                    msg.author.send("You have been unmuted in " + msg.guild.name);
+                }, ms("1d"));
+
+                embed = new Discord.RichEmbed()
+                    .setTitle("Mute")
+                    .addField("Rule breaker", msg.author)
+                    .addField("Executor", bot.user)
+                    .addField("Reason", reason + " (automatic defence)")
+                    .setColor(botconfig.color)
+                    .setThumbnail(msg.author.avatarURL);
+            } else if (level >= 5) {
+                let invite = "https://discord.gg/7DSnwpT"
+                msg.author.send("You have been kicked for `" + reason + "` if you want to return use this link");
+                msg.author.send(invite);
+                msg.author.kick(reason);
+                embed = new Discord.RichEmbed()
+                    .setTitle("Kick with reinvite")
+                    .addField("Rule breaker", msg.author)
+                    .addField("Executor", bot.user)
+                    .addField("Reason", reason + " (automatic defence)")
+                    .setThumbnail(msg.author.avatarURL);
+                return warningChannel.send(embed);
+            }
+
+            warningChannel.send(embed)
+
+            await member.removeRole(currentRole);
+            await member.addRole(msg.guild.roles.find(r => r.name == "strike " + level))
+        }
+        //Spam detection
+        let ignoredIDs = [609049231839199264, 613064164335812617, 613064796564094976, 613064164335812617, 609063485086761031, 610565473502756901]
+        if (!ignoredIDs.includes(message.channel.id)) {
+            if (message.member.roles.find(r => r.name.includes("Admin"))) return;
+            let nonNormal = 0;
+            let CAPS = 0;
+            let seventyProcent = (message.content.length * 7) / 10;
+
+            for (let i = 0; i < message.content.length; i++) {
+                if (message.content.charCodeAt(i) > 255) nonNormal++;
+                if (message.content.charCodeAt(i) >= 65 && message.content.charCodeAt(i) <= 90) CAPS++;
+            }
+
+            if (nonNormal > seventyProcent) {
+                punish(message, "usage of non ascii symbols");
+            } else if (CAPS > seventyProcent && message.content.length > 8) {
+                punish(message, "CAPS lock");
+            }
+        }
+    }
+
+    //Person specific commands
+    if (message.author.id == 353464955217117185) {
+        if (cmd == prefix + "ignore") {
+            let my_settings = require("./rosen-settings.json");
+            my_settings.ignore = !my_settings.ignore
+            fs.writeFile("./rosen-settings.json", JSON.stringify(my_settings), (err) => {
+                if (err) console.error(err);
+            })
+            message.channel.send("Changed: " + my_settings.ignore);
+        }
+        if (cmd == prefix + "void") {
+            let evil = args.join(" ");
+            evil = zalgo(evil);
+            if (!evil) return console.error("No arguments on command 'void'");
+            message.delete();
+            message.channel.send(evil);
         }
     }
 
@@ -224,9 +353,5 @@ bot.on("message", async message => {
         message.react("👎");
     }
 });
-
-function giveXP(user) {
-    
-}
 
 bot.login(process.env.TOKEN);

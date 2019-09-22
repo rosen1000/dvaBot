@@ -10,7 +10,7 @@ module.exports.run = async (bot, message, args) => {
   if(!question) return message.channel.send("You haven't asked me something")
 
   let ballEmbed = new Discord.RichEmbed()
-  .setAuthor(message.author.tag)
+  .setAuthor(message.author.username)
   .setColor(botconfig.color)
   .addField("Question:", question)
   .addField("Answer:", replies[result]);
