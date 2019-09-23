@@ -247,6 +247,26 @@ bot.on("message", async message => {
             message.channel.send(evil);
         }
     }
+    if (message.author.id == 352641880581996547) {
+        if (message.content.length < 4) return;
+        let CAPS = 0;
+        let fiftyPercent = (message.content.length * 5) / 10;
+
+        for (let i = 0; i < message.content.length; i++) {
+            if (message.content.charCodeAt(i) >= 65 && message.content.charCodeAt(i) <= 90) CAPS++;
+        }
+
+        if (CAPS > fiftyPercent) {
+            message.delete();
+            let embed = new Discord.RichEmbed()
+                .setTitle(message.member.nickname + " said:")
+                .setThumbnail(message.author.avatarURL)
+                .setDescription(message.content.toLowerCase())
+                .setFooter("Message automaticly edited for CAPS lock")
+                .setColor(botconfig.color);
+            message.channel.send(embed);
+        }
+    }
 
     // let index = money.indexOf(m => m.name == message.author.id);
     // if (!money[index]) {
