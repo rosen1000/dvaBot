@@ -4,33 +4,27 @@ const SelfReloadJSON = require("self-reload-json");
 let coins = new SelfReloadJSON("./coins.json");
 
 module.exports.run = async (bot, message, args) => {
-    await message.delete();
-    const filter = m => m.author.id === message.author.id;
-    message.channel.send("How much coins will you commit (min 5)");
-    message.channel.awaitMessages(filter, {max: 1, time: 120000}).then(collected => {
-        if(collected.first().content.toLowerLocaleCase === "cancel"){
-            return message.channel.send("canceled!");
-        }
-        let payed = collected.first().content;
+    // await message.delete();
+    // const filter = m => m.author.id === message.author.id;
+    // message.channel.send("How much coins will you commit (min 5)");
+    // message.channel.awaitMessages(filter, {max: 1, time: 120000}).then(collected => {
+        // if(collected.first().content.toLowerLocaleCase === "cancel"){
+        //     return message.channel.send("canceled!");
+        // }
+        // let payed = collected.first().content;
 
-        if(isNaN(payed)) return message.channel.send("This is not a number");
+        // if(isNaN(payed)) return message.channel.send("This is not a number");
 
-        if(payed < 5) return message.channel.send("minimum is 5 coins");
-        if(!coins[message.author.id].coins) return message.channel.send("Not enogth doritos")
-        if(coins[message.author.id].coins < payed){
-            return message.channel.send("Not enogth doritos");
-        }
+        // if(payed < 5) return message.channel.send("minimum is 5 coins");
+        // if(!coins[message.author.id].coins) return message.channel.send("Not enogth doritos")
+        // if(coins[message.author.id].coins < payed){
+        //     return message.channel.send("Not enogth doritos");
+        // }
 
         let emojis = ["🍒", "🍎", "📘", "😝", "💙", "💵"];
         let a = Math.floor(Math.random() * emojis.length);
         let b = Math.floor(Math.random() * emojis.length);
         let c = Math.floor(Math.random() * emojis.length);
-        let score = 0;
-
-        console.log(a + ", " + b + ", " + c)
-
-        if(a == b || b == c || a == c) score = 1;
-        if(a == b == c) score = 2; 
 
         let x = [], y = [], z = [];
         for (let i = 0; i < 3; i++) {
@@ -50,16 +44,15 @@ module.exports.run = async (bot, message, args) => {
         }
         let end;
 
-        console.log(score)
-        if(score == 0) {
-            end = `You lost ${payed} doritos`;
-            coins[message.author.id].coins = coins[message.author.id].coins - payed;
-        } else if(score == 1) {
-            end = `You got 1.5x more from ${payed} to ${payed * 1.5}`;
-            coins[message.author.id].coins = coins[message.author.id].coins + payed * 0.5;
-        } else if(score == 2){
-            end = `You trippled your doritos! from ${payed} to ${payed * 3}`;
-            coins[message.author.id].coins = coins[message.author.id].coins + payed * 2;
+        if (a == b && b == c) {
+            end = 'JACKPOT!!!';
+            // coins[message.author.id].coins = coins[message.author.id].coins - payed;
+        } else if (a == b || a == c || b == c) {
+            end = 'Good one!';
+            // coins[message.author.id].coins = coins[message.author.id].coins + payed * 0.5;
+        } else {
+            end = 'You lost :(';
+            // coins[message.author.id].coins = coins[message.author.id].coins + payed * 2;
         }
 
         let embed = new Discord.RichEmbed()
@@ -70,11 +63,11 @@ module.exports.run = async (bot, message, args) => {
                         ${x[2]} ${y[2]} ${z[2]}`);
         message.channel.send(embed);
         
-        coins.save("utf-8", coins)
-    }).catch(err => {
-        console.log(err);
-        if(err) message.channel.send("outdated");
-    })
+        // coins.save("utf-8", coins)
+    // }).catch(err => {
+    //     console.log(err);
+    //     if(err) message.channel.send("outdated");
+    // })
 
 
 }
