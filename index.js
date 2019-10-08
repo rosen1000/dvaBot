@@ -54,6 +54,17 @@ bot.on("ready", async () => {
 bot.on("guildMemberAdd", async member => {
     //Eva's server
     if (member.guild.id == 514125758751440896) {
+        //Add roles to new members
+        let role = member.guild.roles.find(r => r.id == 631220643647455292);
+        if (role) {
+            try {
+                await member.addRole(role);
+            } catch (e) {
+                if (e) console.log(e);
+            }
+        }
+
+        //Welcome new members
         let welcomeChannel = member.guild.channels.find(ch => ch.id == 514125758751440900);
         if (!welcomeChannel) return;
         
