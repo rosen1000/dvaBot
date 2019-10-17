@@ -25,7 +25,7 @@ require("dotenv").config();
 // });
 
 ["command"].forEach(handler => {
-    require(`./handler/${handler}`)(bot);
+    require(`./handlers/${handler}`)(bot);
 })
 
 bot.on("ready", async () => {
