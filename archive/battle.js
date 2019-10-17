@@ -130,6 +130,49 @@ let checkReady = function (lobby) {
 
 let beginMain = function (lobby, message) {
     //TODO: Automaticly make channel where all the battles will happen, make the battles and elect the winner
+
+    let battleFields = message.guild.createChannel('the battlefields', { type: "category", permissionOverwrites: [{ id: message.guild, deny: ['SEND_MESSAGES'] }] });
+    let fights = [[], []];
+    let temp = lobby;
+    for (let i = 0; i < temp.length; i++) {
+        let j;
+        let flag;
+        do {
+            j = Math.floor(Math.random() * temp.length);
+            flag = false;
+            for (let k = 0; k < temp.length; k++) {
+                if (temp[k][1] == temp[j]) {
+                    flag = true;
+                    break;
+                }
+                if (temp[k][2] == temp[j]) {
+                    flag = true;
+                    break;
+                }
+            }
+        } while (flag);
+        fights[i][1] = temp[j];
+
+        do {
+            j = Math.floor(Math.random() * temp.length);
+            flag = false;
+            for (let k = 0; k < temp.length; k++) {
+                if (temp[k][1] == temp[j]) {
+                    flag = true;
+                    break;
+                }
+                if (temp[k][2] == temp[j]) {
+                    flag = true;
+                    break;
+                }
+            }
+        } while (flag);
+        fights[i][2] = temp[j];
+    }
+    if (temp.length % 2 == 1) {
+        fights.pop();
+    }
+    delete temp;
 }
 
 module.exports.help = {
