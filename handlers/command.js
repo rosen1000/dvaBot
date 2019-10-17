@@ -4,9 +4,9 @@ const table = new ascii().setHeading("Command", "Status");
 
 module.exports = (bot) => {
     //Get commands folder
-    fs.readdirSync("../commands/").forEach(dir => {
+    fs.readdirSync("./commands/").forEach(dir => {
         //And get every category
-        const commands = readdirSync(`./commands/${dir}`).filter(f => f.endsWith(".js"));
+        const commands = fs.readdirSync(`./commands/${dir}`).filter(f => f.endsWith(".js"));
 
         //Start setting up commands
         for (let file of commands) {
@@ -22,8 +22,10 @@ module.exports = (bot) => {
             }
 
             //Check for aliases
-            if (pull.aliases && Array.isArray(pull))
+            if (pull.aliases && Array.isArray(pull.aliases))
                 pull.aliases.forEach(al => bot.aliases.set(al, pull.name));
         }
     });
+
+    console.log(table.toString());
 }

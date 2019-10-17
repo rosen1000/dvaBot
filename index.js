@@ -25,8 +25,8 @@ require("dotenv").config();
 // });
 
 ["command"].forEach(handler => {
-    require(`./handlers/${handler}`)(bot);
-})
+    require(__dirname + `/handlers/${handler}.js`)(bot);
+});
 
 bot.on("ready", async () => {
     console.log(`${bot.user.username} is online in ${bot.guilds.size} servers ^^`);
@@ -102,8 +102,10 @@ bot.on("message", async message => {
     let prefix = botconfig.prefix;
     let args = message.content.slice(prefix.length).trim().split(/ +/g);
     let cmd = args.shift().toLocaleLowerCase();
-    if (message.content.startsWith("?")) {
-        let commandfile = bot.commands.get(cmd.slice(prefix.length));
+
+    if (message.content.startsWith(prefix)) {
+        let commandfile = bot.commands.get(cmd);
+        if (!commandfile) commandfile = bot.commands.get(bot.aliases.get(cmd));
         if (commandfile) commandfile.run(bot, message, args);
     }
 

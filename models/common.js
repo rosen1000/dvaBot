@@ -27,10 +27,15 @@ module.exports = {
     /**
      * @param date
      * 
-     * 
+     * @returns {String}
+     * Formated Date
      */
 
     formatDate: (date) => {
-        return new Intl.DateTimeFormat("uk-UK").format(date);
+        let options = {
+            dateStyle: "short",
+            timeZone: "Europe/Sofia"
+        }
+        return new Intl.DateTimeFormat("en-GB", options).format(date);
     }
 }
