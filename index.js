@@ -6,24 +6,27 @@ const ms = require("ms");
 const bot = new Discord.Client({ disableEveryone: true });
 const zalgo = require("to-zalgo");
 bot.commands = new Discord.Collection();
+bot.aliases = new Discord.Collection();
 require("dotenv").config();
 // const dataBase = require("./models/keyv.js");
 
-fs.readdir("./commands/", (err, files) => {
-    if (err) console.log(err);
+// fs.readdir("./commands/", (err, files) => {
+//     if (err) console.log(err);
+//     let jsfile = files.filter(f => f.split(".").pop() === 'js')
+//     if (jsfile.length <= 0) {
+//         console.log("Couln't find commands.");
+//         return;
+//     }
+//     jsfile.forEach((f, i) => {
+//         let props = require(`./commands/${f}`);
+//         console.log(`${f} loaded!`);
+//         bot.commands.set(props.help.name, props);
+//     });
+// });
 
-    let jsfile = files.filter(f => f.split(".").pop() === 'js')
-    if (jsfile.length <= 0) {
-        console.log("Couln't find commands.");
-        return;
-    }
-
-    jsfile.forEach((f, i) => {
-        let props = require(`./commands/${f}`);
-        console.log(`${f} loaded!`);
-        bot.commands.set(props.help.name, props);
-    });
-});
+["command"].forEach(handler => {
+    require(`./handler/${handler}`)(bot);
+})
 
 bot.on("ready", async () => {
     console.log(`${bot.user.username} is online in ${bot.guilds.size} servers ^^`);
@@ -97,9 +100,8 @@ bot.on("message", async message => {
     if (message.channel.id == "471208730688487424") return;
 
     let prefix = botconfig.prefix;
-    let messageArray = message.content.split(" ");
-    let cmd = messageArray[0].toLocaleLowerCase();
-    let args = messageArray.slice(1);
+    let args = message.content.slice(prefix.length).trim().split(/ +/g);
+    let cmd = args.shift().toLocaleLowerCase();
     if (message.content.startsWith("?")) {
         let commandfile = bot.commands.get(cmd.slice(prefix.length));
         if (commandfile) commandfile.run(bot, message, args);

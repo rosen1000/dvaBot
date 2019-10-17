@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "@keyv/mongo": "^1.1.0",
+    "ascii-table": "0.0.9",
     "discord.js": "^11.4.2",
     "dotenv": "^6.2.0",
     "fortnite": "^4.1.1",
