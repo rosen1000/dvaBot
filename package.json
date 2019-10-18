@@ -4,18 +4,12 @@
   "description": "Bot",
   "main": "index.js",
   "dependencies": {
-    "@keyv/mongo": "^1.1.0",
     "ascii-table": "0.0.9",
     "common-tags": "^1.8.0",
     "discord.js": "^11.4.2",
     "dotenv": "^6.2.0",
-    "fortnite": "^4.1.1",
     "keyv": "^3.1.0",
-    "mongoose": "^5.4.11",
     "ms": "^2.1.1",
-    "node-gif": "^1.0.5",
-    "node-gyp": "^5.0.3",
-    "node-png": "^0.4.3",
     "rebuild": "^0.1.2",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
@@ -26,7 +20,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "?ping"
+    "start": "node index.js"
   },
   "author": "rosen1000",
   "license": "ISC"
