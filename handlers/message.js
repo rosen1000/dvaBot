@@ -6,7 +6,6 @@ module.exports = (bot) => {
     bot.on("message", async (message) => {
         if (message.author.bot) return;
         if (message.channel.type === "dm") return;
-        if (message.channel.id == "471208730688487424") return;
     
         let prefix = botconfig.prefix;
         let args = message.content.slice(prefix.length).trim().split(/ +/g);
@@ -144,14 +143,6 @@ module.exports = (bot) => {
     
         //Person specific commands
         if (message.author.id == 353464955217117185) {
-            if (cmd == prefix + "ignore") {
-                let my_settings = require("./rosen-settings.json");
-                my_settings.ignore = !my_settings.ignore
-                fs.writeFile("./rosen-settings.json", JSON.stringify(my_settings), (err) => {
-                    if (err) console.error(err);
-                })
-                message.channel.send("Changed: " + my_settings.ignore);
-            }
             if (cmd == prefix + "void") {
                 let evil = args.join(" ");
                 evil = zalgo(evil);
@@ -173,15 +164,14 @@ module.exports = (bot) => {
                 message.delete();
                 let embed = new Discord.RichEmbed()
                     .setTitle(message.member.nickname + " said:")
-                    .setThumbnail(message.author.avatarURL)
                     .setDescription(message.content.toLowerCase())
-                    .setFooter("Message automaticly edited for CAPS lock")
+                    .setFooter("Message automaticly edited for CAPS lock", message.author.displayAvatarURL)
                     .setColor(botconfig.color);
                 message.channel.send(embed);
             }
         }
         
-        if (cmd.includes("nudes")) message.channel.send(":eyes:")
+        if (args.includes("nudes")) message.channel.send(":eyes:")
 
         if (message.channel.id == "462294972872392704") {
             message.react("👍");
