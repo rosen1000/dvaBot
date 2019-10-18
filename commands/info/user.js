@@ -6,7 +6,7 @@ module.exports = {
     aliases: ["who", "whois", "userinfo", "member", "memberinfo"],
     category: "info",
     desc: "Shows information about a user (not a member)",
-    use: "[username || id || mention || default=author]",
+    use: "[username | id | mention | default=author]",
     run: async (bot, message, args) => {
         const member = getMember(message, args.join(" ")) || message.member;
         const createdAt = formatDate(member.user.joinedTimestamp);
