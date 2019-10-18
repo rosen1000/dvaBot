@@ -242,14 +242,6 @@ bot.on("message", async message => {
 
     //Person specific commands
     if (message.author.id == 353464955217117185) {
-        if (cmd == prefix + "ignore") {
-            let my_settings = require("./rosen-settings.json");
-            my_settings.ignore = !my_settings.ignore
-            fs.writeFile("./rosen-settings.json", JSON.stringify(my_settings), (err) => {
-                if (err) console.error(err);
-            })
-            message.channel.send("Changed: " + my_settings.ignore);
-        }
         if (cmd == prefix + "void") {
             let evil = args.join(" ");
             evil = zalgo(evil);
@@ -377,7 +369,7 @@ bot.on("message", async message => {
     //     }//test.js still exists
     // }
 
-    if (cmd.includes("nudes")) message.channel.send(":eyes:")
+    if (args.includes("nudes")) message.channel.send(":eyes:")
 
     if (message.channel.id == "462294972872392704") {
         message.react("👍");
