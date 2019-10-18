@@ -1,4 +1,5 @@
 const { getMember } = require("../../models/common");
+const { RichEmbed } = require("discord.js");
 
 module.exports = {
     name: "kick",
@@ -15,12 +16,22 @@ module.exports = {
         if (message.author.id == member.id) return message.channel.send("There's a leave button 'ya know?");
         if (member.kickable) return message.channel.send("I can't kick him tho.. He is more powerfull than me");
         
-        member.kick(args.slice(1).join(" ")).catch(e => {
+        member.kick(args.slice(1).join(" ") || "Breaking rules").catch(e => {
             if (e) {
                 console.log(e);
                 return message.channel.send("Ok... I wasnt able to kick him?")
             }
         });
         message.channel.send("Done! " + member.user.username + " is gone for now");
+        
+        let channel = message.guild.channel.find(ch => ch.inclides("log"));
+        let embed = new RichEmbed()
+            .setTitle("<===Kick Report===>")
+            .setColor(require("../../botconfig.json").color)
+            .addField("Kicked member", member.user.username)
+            .addField("Kicked by", message.author)
+            .addField("Kicked at", message.createdAt)
+            .addField("Reason", args.slice(1).join(" ") || "Breaking rules");
+        if (channel) channel.send(embed);
     }
 }
