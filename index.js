@@ -7,6 +7,7 @@ const bot = new Discord.Client({ disableEveryone: true });
 const zalgo = require("to-zalgo");
 bot.commands = new Discord.Collection();
 bot.aliases = new Discord.Collection();
+bot.categories = fs.readdirSync("./commands/");
 require("dotenv").config();
 // const dataBase = require("./models/keyv.js");
 
