@@ -1,3 +1,5 @@
+const ms = require("ms");
+
 module.exports = (bot) => {
     bot.on("ready", async () => {
         console.log(`${bot.user.username} is online in ${bot.guilds.size} servers ^^`);
