@@ -30,11 +30,11 @@ module.exports = {
         let embed = new RichEmbed()
             .setColor(require("../../botcnofig.json").color)
             .setTitle("<===Ban Report===>")
-            .addField("Banned member", member.user.username)
-            .addField("Banned by", message.author)
-            .addField("Banned at", message.createdAt)
-            .addField("Channel", message.channel)
-            .addField("Reason", args.slice(1).join(" ") || "Breaking rules");
+            .addField("Banned member", member.user.username, true)
+            .addField("Banned by", message.author, true)
+            .addField("Banned at", message.createdAt, true)
+            .addField("Channel", message.channel, true)
+            .addField("Reason", args.slice(1).join(" ") || "Breaking rules", true);
         if (channel) channel.send(embed);
     }
 }

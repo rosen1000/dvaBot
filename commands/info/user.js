@@ -29,7 +29,7 @@ module.exports = {
             **> Created at:** ${createdAt}`, true)
             .setTimestamp();
         if (member.user.presence.game) {
-            embed.addField("Currently playing", stripIndents`**> Name:** ${member.user.presence.game.name}`);
+            embed.addField("Currently playing", stripIndents`**> Name:** ${member.user.presence.game.name}`, true);
         }
 
         message.channel.send(embed);

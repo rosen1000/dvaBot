@@ -28,10 +28,10 @@ module.exports = {
         let embed = new RichEmbed()
             .setTitle("<===Kick Report===>")
             .setColor(require("../../botconfig.json").color)
-            .addField("Kicked member", member.user.username)
-            .addField("Kicked by", message.author)
-            .addField("Kicked at", message.createdAt)
-            .addField("Reason", args.slice(1).join(" ") || "Breaking rules");
+            .addField("Kicked member", member.user.username, true)
+            .addField("Kicked by", message.author, true)
+            .addField("Kicked at", message.createdAt, true)
+            .addField("Reason", args.slice(1).join(" ") || "Breaking rules", true);
         if (channel) channel.send(embed);
     }
 }
