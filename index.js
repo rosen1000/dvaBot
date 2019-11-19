@@ -261,13 +261,12 @@ bot.on("message", async message => {
 
         if (CAPS > fiftyPercent) {
             message.delete();
-            let embed = new Discord.RichEmbed()
-                .setTitle(message.member.nickname + " said:")
-                .setThumbnail(message.author.avatarURL)
-                .setDescription(message.content.toLowerCase())
-                .setFooter("Message automaticly edited for CAPS lock")
-                .setColor(botconfig.color);
-            message.channel.send(embed);
+            let webhook;
+            await message.channel.createWebhook(message.member.nickname, message.author.displayAvatarURL).then(w => {
+                webhook = w;
+            });
+            webhook.send(message.content.toLowerCase());
+            webhook.delete();
         }
     }
 
