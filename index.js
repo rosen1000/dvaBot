@@ -54,6 +54,17 @@ bot.on("ready", async () => {
 bot.on("guildMemberAdd", async member => {
     //Eva's server
     if (member.guild.id == 514125758751440896) {
+        //Add roles to new members
+        let role = member.guild.roles.find(r => r.id == 631220643647455292);
+        if (role) {
+            try {
+                await member.addRole(role);
+            } catch (e) {
+                if (e) console.log(e);
+            }
+        }
+
+        //Welcome new members
         let welcomeChannel = member.guild.channels.find(ch => ch.id == 514125758751440900);
         if (!welcomeChannel) return;
         
@@ -231,14 +242,6 @@ bot.on("message", async message => {
 
     //Person specific commands
     if (message.author.id == 353464955217117185) {
-        if (cmd == prefix + "ignore") {
-            let my_settings = require("./rosen-settings.json");
-            my_settings.ignore = !my_settings.ignore
-            fs.writeFile("./rosen-settings.json", JSON.stringify(my_settings), (err) => {
-                if (err) console.error(err);
-            })
-            message.channel.send("Changed: " + my_settings.ignore);
-        }
         if (cmd == prefix + "void") {
             let evil = args.join(" ");
             evil = zalgo(evil);
@@ -258,13 +261,12 @@ bot.on("message", async message => {
 
         if (CAPS > fiftyPercent) {
             message.delete();
-            let embed = new Discord.RichEmbed()
-                .setTitle(message.member.nickname + " said:")
-                .setThumbnail(message.author.avatarURL)
-                .setDescription(message.content.toLowerCase())
-                .setFooter("Message automaticly edited for CAPS lock")
-                .setColor(botconfig.color);
-            message.channel.send(embed);
+            let webhook;
+            await message.channel.createWebhook(message.member.nickname, message.author.displayAvatarURL).then(w => {
+                webhook = w;
+            });
+            webhook.send(message.content.toLowerCase());
+            webhook.delete();
         }
     }
 
@@ -366,7 +368,7 @@ bot.on("message", async message => {
     //     }//test.js still exists
     // }
 
-    if (cmd.includes("nudes")) message.channel.send(":eyes:")
+    if (args.includes("nudes")) message.channel.send(":eyes:")
 
     if (message.channel.id == "462294972872392704") {
         message.react("👍");
