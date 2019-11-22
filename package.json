@@ -13,11 +13,11 @@
     "random-puppy": "^1.1.0",
     "rebuild": "^0.1.2",
     "request": "^2.88.0",
-    "request-promise": "^4.2.2",
+    "request-promise": "^4.2.5",
     "self-reload-json": "^0.4.0",
     "to-zalgo": "^1.0.1",
-    "warframe-items": "^1.178.0",
-    "warframe-worldstate-parser": "^2.1.24"
+    "warframe-items": "^1.655.0",
+    "warframe-worldstate-parser": "^2.9.5"
   },
   "devDependencies": {},
   "scripts": {
