@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const serverSchema = mongoose.Schema({
-    prefix: String
+    id: Number,
+    prefix: String,
+    coinType: "doritos",
+    coinName: "doritos"
 });
 
 module.exports = mongoose.model("server", serverSchema);

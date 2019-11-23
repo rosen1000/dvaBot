@@ -3,6 +3,7 @@ const ms = require("ms");
 const zalgo = require("to-zalgo");
 const mongoose = require("../models/mongoose");
 const memberSchema = require("../models/member");
+const serverSchema = require("../models/server");
 let xpCooldowns;
 
 module.exports = (bot) => {
@@ -181,7 +182,9 @@ module.exports = (bot) => {
             message.react("👎");
         }
 
-        mongoose.find({ userID: message.author.id, serverID: message.guild.id }, (e) => {
+        let member = mongoose.model("member", memberSchema);
+        let server = mongoose.model("server", serverSchema);
+        member.find({ userID: message.author.id, serverID: message.guild.id }, async (e, user) => {
             if (e) console.log(e);
             if (!user) {
                 let newMember = memberSchema({
@@ -193,25 +196,37 @@ module.exports = (bot) => {
                 });
                 newMember.save().catch(e => { if (e) console.log(e) });
             } else {
-                if (xpCooldowns.includes(message.author.id)) return;
-                xpCooldowns.push(message.author.id);
-                setTimeout(() => {
-                    xpCooldowns.shift();
-                }, ms("30s"));
-                let addedXP = Math.floor(Math.random() * 10) + 5;
-                user.xp += addedXP;
-                // nextLevelXP = 2 * currentLevel ^ 2 + 20
-                // x = 2y^2 + 20
-                let nextLevelXP = 2 * user.level ^ 2 + 20;
-                if (user.xp > nextLevelXP) {
-                    const embed = new Discord.RichEmbed()
-                        .addField("You leveled up! Have a 🍪", user.level + " => " + user.level + 1)
-                        .setColor(botconfig.color)
-                        .setFooter(message.author.username, message.author.displayAvatarURL);
-                    message.channel.send(embed).then(msg => { msg.delete(4000) });
-                    user.level += 1;
+                if (!xpCooldowns.includes(message.author.id)) {
+                    xpCooldowns.push(message.author.id);
+                    setTimeout(() => {
+                        xpCooldowns.shift();
+                    }, ms("30s"));
+                    let addedXP = Math.floor(Math.random() * 10) + 5;
+                    user.xp += addedXP;
+                    // nextLevelXP = 2 * currentLevel ^ 2 + 20
+                    // x = 2y^2 + 20
+                    let nextLevelXP = 2 * user.level ^ 2 + 20;
+                    if (user.xp > nextLevelXP) {
+                        const embed = new Discord.RichEmbed()
+                            .addField("You leveled up! Have a 🍪", user.level + " => " + user.level + 1)
+                            .setColor(botconfig.color)
+                            .setFooter(message.author.username, message.author.displayAvatarURL);
+                        message.channel.send(embed).then(msg => { msg.delete(4000) });
+                        user.level += 1;
+                    }
                 }
-                user.save();
+                let coinAmt = Math.floor(Math.random() * 18) + 10;
+                let baseAmt = Math.floor(Math.random() * 15) + 10;
+                if (coinAmt == baseAmt) {
+                    user.money += coinAmt;
+                    let emoji;
+                    await server.findOne({ id: message.guild.id }, (e, guild) => {
+                        if (e) console.log(e);
+                        if (guild) emoji = message.guild.emojis.find(e => { e.name == guild.coinName });
+                        
+                    });
+                }
+                user.save().catch(e => { if (e) console.log(e); });
             }
         });
     });
