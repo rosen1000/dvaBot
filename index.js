@@ -251,6 +251,8 @@ bot.on("message", async message => {
         }
     }
     if (message.author.id == 352641880581996547) {
+        // INVALID FORM BODY QUICK FIX
+        return;
         if (message.content.length < 4) return;
         let CAPS = 0;
         let fiftyPercent = (message.content.length * 5) / 10;
