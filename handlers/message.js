@@ -181,7 +181,7 @@ module.exports = (bot) => {
             message.react("👍");
             message.react("👎");
         }
-
+        return;
         let member = mongoose.model("member", memberSchema);
         let server = mongoose.model("server", serverSchema);
         member.find({ userID: message.author.id, serverID: message.guild.id }, async (e, user) => {

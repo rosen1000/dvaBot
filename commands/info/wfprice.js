@@ -8,37 +8,37 @@ module.exports = {
     run: async (bot, message, args) => {
         let item = args.join("_").toLocaleLowerCase();
         if (!item) return message.channel.send("No item was given");
-
-        axios.get(`https://api.warframe.market/v1/items/${item}/orders/`).then(resolve(this, item, message)).catch((e) => {
+        axios.get(`https://api.warframe.market/v1/items/${item}/orders`).then(r => resolve(r, item, message)).catch((e) => {
             if (e) {
-                axios.get(`https://api.warframe.market/v1/items/${item}_blueprint/order/`).then(resolve(this , item, message)).catch((e) => {
-                    if (e) {
-                        message.channel.send("No item was found");
-                    }
-                })
+                message.channel.send("No item was found");
             }
         });
     }
 }
 
 let resolve = function(resolve, item, message) {
-    let items = resolve.payload.orders.filter(it => it.visible == true && it.platform == "pc" && it.order_type == "sell" && it.user.status != "offline");
-    for (let i = 0; i < items.length; i++) {
-        for (let j = 1; j < i; i++) {
-            if (items[i].platinum < items[j].platinum) {
-                let temp = items[i];
-                items[i] = items[j];
-                items[j] = temp;
-            }
+    let items = resolve.data.payload.orders.filter(it => it.visible == true && it.platform == "pc" && it.order_type == "sell" && it.user.status == "ingame");
+    if (!items) return message.channel.send("No orders found for this item");
+    let cheapest = items[0];
+    for (let i = 0; i < items.length - 1; i++) {
+        if (items[i].platinum < cheapest.platinum) {
+            cheapest = items[i];
         }
     }
 
+    item = item.split("_");
+    for (let i = 0; i < item.length; i++) {
+        item[i] = item[i].charAt(0).toUpperCase() + item[i].slice(1);
+    }
+    item = item.join(" ");
+
     let embed = new Discord.RichEmbed()
         .setColor(require("../../botconfig.json").color)
-        .setTitle(item.split("_").join(" ").toUpperCase() + " prices:")
-        .addField("Username:", items[0].user.ingame_name, true)
-        .addField("Price:", items[0].platinum, true)
-        .addField("Status:", items[0].user.status, true)
-        .addField("Quantity:", items[0].quantity);
+        .setTitle(item + " prices:")
+        .addField("Username:", cheapest.user.ingame_name, true)
+        .addField("Price:", cheapest.platinum, true)
+        .addField("Status:", cheapest.user.status, true)
+        .addField("Quantity:", cheapest.quantity)
+        .addField("In-game command:", `/w ${cheapest.user.ingame_name} Hi! I want to buy: ${item} for ${cheapest.platinum} platinum. (warframe.market)`);
     message.channel.send(embed);
 }
