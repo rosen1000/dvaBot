@@ -1,6 +1,5 @@
 const Discord = require("discord.js");
 const axios = require("axios");
-const common = require("../../models/common");
 
 module.exports = {
     name: "wftime",
