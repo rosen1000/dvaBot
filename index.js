@@ -6,8 +6,8 @@ bot.aliases = new Collection();
 bot.categories = readdirSync("./commands/");
 require("dotenv").config();
 
-["ready", "message", "guildMemberAdd", "guildMemberRemove", "voiceStateUpdate","command"].forEach(handler => {
-    require(__dirname + `/handlers/${handler}.js`)(bot);
+readdirSync("./handlers/").forEach(file => {
+    require(__dirname + `/handlers/${file}`)(bot);
 });
 
 bot.login(process.env.TOKEN);
