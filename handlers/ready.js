@@ -32,7 +32,18 @@ module.exports = (bot) => {
                 // if (oldMember.guild.id != 417384366893826049) return;
                 let expandableChannels = newMember.guild.channels.filter(ch => ch.type == "voice" && ch.name.includes("New Channel"));
                 if (newMember.voiceChannel == channelJoin) {
-                    let channel = await channelJoin.clone("New Channel " + (parseInt(expandableChannels.size) + 1));
+                    let number = parseInt(expandableChannels.size);
+                    let tempChannels = [];
+                    for (let channel in expandableChannels) {
+                        tempChannels.push(channel)
+                    }
+                    for (let i = 0; i < tempChannels.length; i++) {
+                        if (parseInt(tempChannels[i].name.split(" ")[2]) != i + 1) {
+                            number = i;
+                            break;
+                        }
+                    }
+                    let channel = await channelJoin.clone("New Channel " + (number + 1));
                     channel.setParent(newMember.voiceChannel.parent);
                     channel.setPosition(newMember.voiceChannel.position + 1);
                     newMember.setVoiceChannel(channel);
