@@ -9,7 +9,7 @@
     "common-tags": "^1.8.0",
     "discord.js": "^11.4.2",
     "dotenv": "^6.2.0",
-    "mongoose": "^5.7.13",
+    "mongoose": "^5.8.1",
     "ms": "^2.1.1",
     "random-puppy": "^1.1.0",
     "rebuild": "^0.1.2",
@@ -17,7 +17,7 @@
     "request-promise": "^4.2.5",
     "self-reload-json": "^0.4.0",
     "to-zalgo": "^1.0.1",
-    "warframe-items": "^1.669.0",
+    "warframe-items": "^1.679.0",
     "warframe-worldstate-parser": "^2.9.5"
   },
   "devDependencies": {},
