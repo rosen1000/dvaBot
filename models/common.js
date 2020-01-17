@@ -10,8 +10,11 @@ module.exports = {
      * GuildMember
      */
     getMember(message, id) {
-        id = id.toLowerCase();
-        let target = message.guild.members.get(id);
+        let target;
+        if (id) {
+            id = id.toLowerCase();
+            target = message.guild.members.get(id);
+        }
 
         if (!target && message.mentions.members) {
             target = message.mentions.members.first();
@@ -20,7 +23,7 @@ module.exports = {
                 return m.displayName.toLowerCase().includes(id) ||
                 m.user.tag.toLowerCase().includes(id);
             });
-        } else if (!target) target = message.member;
+        }
 
         return target;
     },
