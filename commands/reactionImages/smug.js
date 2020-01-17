@@ -6,6 +6,7 @@ module.exports = {
     category: "reaction images",
     desc: "smug smug smug",
     use: "[mention]",
+    enabled: true,
     run: async (bot, message, args) => {
         const embed = getReaction(this.name);
         const target = getMember(message, args[0]);

@@ -6,6 +6,7 @@ module.exports = {
     category: "mod",
     desc: "Makes the bot say something",
     use: "[embed]",
+    enabled: true,
     run: async (bot, message, args) => {
         if (!message.member.hasPermission("MANAGE_MESSAGES"))
             return message.channel.send("Only members with `MANAGE_MESSAGES` can use that command :/");

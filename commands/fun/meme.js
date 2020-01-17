@@ -6,6 +6,7 @@ module.exports = {
     category: "fun",
     desc: "Posts random meme from r/meme r/dankmeme or r/me_irl",
     use: "meme",
+    enabled: true,
     run: async (bot, message, args) => {
         const reddits = ["dankmeme", "meme", "me_irl"];
         const random = reddits[Math.floor(Math.random() * reddits.length)];

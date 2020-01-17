@@ -6,6 +6,7 @@ module.exports = {
     category: "mod",
     desc: "Kicks a missbehiving member",
     usage: "<username || id || mention> [reason]",
+    enabled: true,
     run: async (bot, message, args) => {
         if (!message.member.hasPermission("KICK_MEMBERS")) return message.channel.send("But you can't kick members .-.");
         if (!message.guild.me.hasPermission("KICK_MEMBERS")) return message.channel.send("Psst... Tell the admins that i can't kick...");

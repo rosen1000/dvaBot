@@ -6,6 +6,7 @@ module.exports = {
     category: "info",
     desc: "Shows the time on Cetus and Orb Vallis",
     use: "[cetus/orb vallis]",
+    enabled: true,
     run: async (bot, message, args) => {
         axios.get("http://api.warframestat.us/pc").then(resolve => {
             if (resolve.status == 200) {

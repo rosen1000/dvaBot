@@ -5,6 +5,7 @@ module.exports = {
     category: "info",
     desc: "Check the prices for a item in warframe",
     use: "<item>",
+    enabled: true,
     run: async (bot, message, args) => {
         let item = args.join("_").toLocaleLowerCase();
         if (!item) return message.channel.send("No item was given");

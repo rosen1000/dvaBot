@@ -6,6 +6,7 @@ module.exports = {
     category: "fun",
     desc: "Posts random meme from r/animemes",
     use: "animeme",
+    enabled: true,
     run: async (bot, message, args) => {
         const animeme = await randomPuppy("animeme");
         const embed = new RichEmbed()

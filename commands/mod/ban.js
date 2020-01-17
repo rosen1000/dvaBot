@@ -7,7 +7,7 @@ module.exports = {
     category: "mod",
     desc: "Ban a member for being too bad lately",
     use: "<username | id | mention> [reason]",
-    
+    enabled: true,
     run: async (bot, message, args) => {
         if (!message.member.hasPermission("BAN_MEMBERS")) return message.channel.send("But you can't ban members .-.");
         if (!message.guild.me.hasPermission("BAN_MEMBERS")) return message.channel.send("Psst... Tell the admins that i can't ban...");

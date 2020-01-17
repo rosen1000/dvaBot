@@ -8,6 +8,7 @@ module.exports = {
     category: "info",
     desc: "Shows the help command... basicly that one",
     use: "[command | aliases]",
+    enabled: true,
     run: async (bot, message, args) => {
         let embed;
         if (args[0]) embed = getCommand(bot, args[0]);

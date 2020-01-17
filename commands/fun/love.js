@@ -7,6 +7,7 @@ module.exports = {
     category: "fun",
     description: "Predicts how much 2 people love each other",
     use: "<mention | id | args>",
+    enabled: true,
     run: async (bot, message, args) => {
         let lover = getMember(message, args[0]);
         if (lover) {

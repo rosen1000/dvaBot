@@ -6,6 +6,7 @@ module.exports = {
     category: "fun",
     desc: "OwOifies text",
     use: "<text>",
+    enabled: true,
     run: async (bot, message, args) => {
         axios.get("https://nekos.life/api/v2/owoify?text=" + encodeURI(args.join(" "))).then(response => {
             if (response.data.msg)
