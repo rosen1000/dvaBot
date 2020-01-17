@@ -8,7 +8,7 @@ module.exports = {
     use: "[mention]",
     enabled: true,
     run: async (bot, message, args) => {
-        const embed = getReaction(this.name);
+        const embed = await getReaction(this.name);
         const target = getMember(message, args[0]);
         if (target)
             embed.setDescription(`${target} you got fed with ${args[1] ? args[1] : "spaghetti"}`);
