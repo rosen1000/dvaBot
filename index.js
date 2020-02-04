@@ -255,30 +255,29 @@ bot.on("message", async message => {
         let CAPS = 0;
         let fiftyPercent = (message.content.length * 5) / 10;
 
-        let msg = message.content.split(" ");
-        let test = ["uwu", "owo", ":3", "x3", ":>", "c:", "daddy"];
-        let flag = false;
+        // let msg = message.content.split(" ");
+        // let test = ["uwu", "owo", ":3", "x3", ":>", "c:", "daddy"];
+        // let flag = false;
 
-        msg = msg.filter((value, index, array) => {
-            for (let i = 0; i < test.length; i++) {
-                console.log(value, test[i])
-                if (value.toLowerCase() == test[i]) {
-                    flag = true;
-                    return false;
-                }
-            }
-            return true;
-        });
+        // msg = msg.filter((value, index, array) => {
+        //     for (let i = 0; i < test.length; i++) {
+        //         if (value.toLowerCase() == test[i]) {
+        //             flag = true;
+        //             return false;
+        //         }
+        //     }
+        //     return true;
+        // });
 
-        if (flag) {
-            message.delete();
-            let webhook;
-            await message.channel.createWebhook(message.member.nickname, message.author.displayAvatarURL).then(w => {
-                webhook = w;
-            });
-            webhook.send(msg);
-            webhook.delete();
-        }
+        // if (flag) {
+        //     message.delete();
+        //     let webhook;
+        //     await message.channel.createWebhook(message.member.nickname, message.author.displayAvatarURL).then(w => {
+        //         webhook = w;
+        //     });
+        //     webhook.send(msg);
+        //     webhook.delete();
+        // }
 
         for (let i = 0; i < message.content.length; i++) {
             if (message.content.charCodeAt(i) >= 65 && message.content.charCodeAt(i) <= 90) CAPS++;
