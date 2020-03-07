@@ -16,6 +16,30 @@ const serverSchema = mongoose.Schema({
     coinCustom: {
         default: false,
         type: Boolean
+    },
+    startingCoins: {
+        default: 0,
+        type: Number
+    },
+    dailyReward: {
+        default: 100,
+        type: Number
+    },
+    dailyStreakIncrease: {
+        default: 50,
+        type: Number
+    },
+    minCoinDrop: {
+        default: 5,
+        type: Number
+    },
+    maxCoinDrop: {
+        default: 14,
+        type: Number
+    },
+    disableCoinDropNotif: {
+        default: false,
+        type: Boolean
     }
 },
 {

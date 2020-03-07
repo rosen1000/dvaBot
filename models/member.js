@@ -1,11 +1,22 @@
 const mongoose = require("mongoose");
-// DEPRECATED: will be removed in near future!
 const memberSchema = mongoose.Schema({
     userID: String,
-    serverID: String,
-    money: Number,
+    guildID: String,
+    coins: Number,
     level: Number,
-    xp: Number
+    xp: Number,
+    marry: String,
+    notifyCoinDrop: {
+        default: true,
+        type: Boolean
+    },
+    seenCoinDropHint: {
+        default: false,
+        type: Boolean
+    }
+},
+{
+    strict: false
 });
 
 module.exports = mongoose.model("member", memberSchema);
