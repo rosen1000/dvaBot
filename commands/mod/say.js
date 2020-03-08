@@ -2,7 +2,6 @@ const { RichEmbed } = require("discord.js");
 
 module.exports = {
     name: "say",
-    aliases: undefined,
     category: "mod",
     desc: "Makes the bot say something",
     use: "[embed]",
