@@ -13,6 +13,10 @@ const memberSchema = mongoose.Schema({
     seenCoinDropHint: {
         default: false,
         type: Boolean
+    },
+    warns: {
+        default: 0,
+        type: Number
     }
 },
 {

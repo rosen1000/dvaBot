@@ -40,6 +40,10 @@ const serverSchema = mongoose.Schema({
     disableCoinDropNotif: {
         default: false,
         type: Boolean
+    },
+    warnsEnabled: {
+        default: true,
+        type: Boolean
     }
 },
 {
