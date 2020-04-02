@@ -57,7 +57,7 @@ bot.on("guildMemberAdd", async member => {
     //Eva's server
     if (member.guild.id == 514125758751440896) {
         //Add roles to new members
-        let role = member.guild.roles.find(r => r.id == 631220643647455292);
+        let role = member.guild.roles.cache.find(r => r.id == 631220643647455292);
         if (role) {
             try {
                 await member.addRole(role);
@@ -67,17 +67,17 @@ bot.on("guildMemberAdd", async member => {
         }
 
         //Welcome new members
-        let welcomeChannel = member.guild.channels.find(ch => ch.id == 514125758751440900);
+        let welcomeChannel = member.guild.channels.cache.find(ch => ch.id == 514125758751440900);
         if (!welcomeChannel) return;
         
-        let rulesChannel = member.guild.channels.find(ch => ch.id == 519828142370586625);
-        let introductionChannel = member.guild.channels.find(ch => ch.id == 604352341726199838);
-        console.log(welcomeChannel.guild.channels.find(ch => ch.id == "514125758751440900"))
-        welcomeChannel.guild.channels.find(ch => ch.id == 514125758751440900).send(`Welcome ${member} Make sure to read and follow the ${rulesChannel} and introduce yourself in ${introductionChannel}. Have a great time!`);
+        let rulesChannel = member.guild.channels.cache.find(ch => ch.id == 519828142370586625);
+        let introductionChannel = member.guild.channels.cache.find(ch => ch.id == 604352341726199838);
+        console.log(welcomeChannel.guild.channels.cache.find(ch => ch.id == "514125758751440900"))
+        welcomeChannel.guild.channels.cache.find(ch => ch.id == 514125758751440900).send(`Welcome ${member} Make sure to read and follow the ${rulesChannel} and introduce yourself in ${introductionChannel}. Have a great time!`);
         return;
     }
-    let memberrole = member.guild.roles.find(r => r.name == "Members");
-    let botrole = member.guild.roles.find(r => r.name == "BOTS");
+    let memberrole = member.guild.roles.cache.find(r => r.name == "Members");
+    let botrole = member.guild.roles.cache.find(r => r.name == "BOTS");
     if (memberrole) {
         if (!member.user.bot) {
             await member.addRole(memberrole.id)
@@ -92,14 +92,14 @@ bot.on("guildMemberAdd", async member => {
     let numMSG = Math.floor(Math.random() * 37) + 1;
     let wellcomemsg = welcomejson[numMSG]
     var sendMSG = wellcomemsg.replace("${member}", member)
-    var welcomeChannel = member.guild.channels.find(ch => ch.name == "welcome");
+    var welcomeChannel = member.guild.channels.cache.find(ch => ch.name == "welcome");
     if (!welcomeChannel) return;
-    welcomeChannel.send(`${sendMSG}`)
+    welcomeChannel.send(`${sendMSG}`);
 });
 
 bot.on("guildMemberRemove", async member => {
     if (!member.guild.id == "461428273943937044") return;
-    let welcomeChannel = member.guild.channels.find(ch => ch.name == "welcome");
+    let welcomeChannel = member.guild.channels.cache.find(ch => ch.name == "welcome");
     if (!welcomeChannel) return;
     welcomeChannel.send(`${member.user.username} has departed to Auir!`)
 })
@@ -108,7 +108,6 @@ bot.on("message", async message => {
     if (message.author.bot) return;
     if (message.channel.type === "dm") return;
     if (message.channel.id == "471208730688487424") return;
-    if (message.guild.id != "417384366893826049") return;
 
     let prefix = botconfig.prefix;
     let messageArray = message.content.split(" ");
@@ -122,16 +121,16 @@ bot.on("message", async message => {
     //Server specific commands
     if (message.guild.id == 556540661843886092) {
         if (cmd == `${prefix}stefan`) {
-            let stefan = message.guild.members.find(u => u.id == 352641880581996547);
+            let stefan = message.guild.members.cache.find(u => u.id == 352641880581996547);
             if (!stefan) return message.channel.send("stefan is not existend");
-            let channel = message.guild.channels.find(ch => ch.id == 597147754900357140);
-            let oldRoles = stefan.roles;
-            await stefan.removeRoles(stefan.roles);
+            let channel = message.guild.channels.cache.find(ch => ch.id == 597147754900357140);
+            let oldRoles = stefan.roles.cache;
+            await stefan.removeRoles(stefan.roles.cache);
             let time = args[0];
             if (!time) time = "2m";
             if (stefan.voiceChannel) {
                 let lastActiveChannel = stefan.voiceChannel;
-                let role = message.guild.roles.find((r) => r.id == 600649261281050629);
+                let role = message.guild.roles.cache.find((r) => r.id == 600649261281050629);
                 await stefan.addRole(role);
                 stefan.setVoiceChannel(channel);
                 message.channel.send("Stefan was ulted by The Lord of Death, Mordekaiser for " + time);
@@ -153,15 +152,15 @@ bot.on("message", async message => {
     if (message.guild.id == 609041726094704665) {
         let punish = async function (msg, reason) {
             let member = msg.guild.member(msg.author);
-            let currentRole = member.roles.find(r => r.name.includes("strike"));
+            let currentRole = member.roles.cache.find(r => r.name.includes("strike"));
             let nextLevel = currentRole.name.charAt(7)++;
-            let warningChannel = msg.guild.channels.find(ch => ch.id == 613074138596376576);
+            let warningChannel = msg.guild.channels.cache.find(ch => ch.id == 613074138596376576);
             let embed;
 
             if (nextLevel < 4) {
                 msg.author.send("Your message `" + msg.content + "` was flagged for spam with reason `" + reason + "` and was deleted" +
                     "\nif you think the punishment is not used correctly you can contact the server owner");
-                embed = new Discord.RichEmbed()
+                embed = new Discord.MessageEmbed()
                     .setTitle("Warning")
                     .addField("Rule breaker", msg.author)
                     .addField("Executor", bot.user)
@@ -169,11 +168,10 @@ bot.on("message", async message => {
                     .setColor(botconfig.color)
                     .setThumbnail(msg.author.avatarURL);
             } else if (nextLevel == 4) {
-                let muteRole = msg.guild.roles.find(r => r.name == "muted");
+                let muteRole = msg.guild.roles.cache.find(r => r.name == "muted");
                 if (!muteRole) {
                     try {
-                        muteRole = await msg.guild.createRole({
-                            name: "muted",
+                        muteRole = await msg.guild.roles.create("muted", {
                             color: botconfig.black,
                             permission: []
                         });
@@ -225,7 +223,7 @@ bot.on("message", async message => {
         //Spam detection
         let ignoredIDs = [609049231839199264, 613064164335812617, 613064796564094976, 613064164335812617, 609063485086761031, 610565473502756901]
         if (!ignoredIDs.includes(message.channel.id)) {
-            if (message.member.roles.find(r => r.name.includes("Admin"))) return;
+            if (message.member.roles.cache.find(r => r.name.includes("Admin"))) return;
             let nonNormal = 0;
             let CAPS = 0;
             let seventyProcent = (message.content.length * 7) / 10;
@@ -395,12 +393,7 @@ bot.on("message", async message => {
     //     }//test.js still exists
     // }
 
-    if (args.includes("nudes")) message.channel.send(":eyes:")
-
-    if (message.channel.id == "462294972872392704") {
-        message.react("👍");
-        message.react("👎");
-    }
+    if (cmd == "nudes" || args.includes("nudes")) message.channel.send(":eyes:");
 });
 
 bot.login(process.env.TOKEN);
