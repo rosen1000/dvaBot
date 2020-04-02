@@ -1,16 +1,27 @@
+const Discord = require("discord.js");
+const botconfig = require("../botconfig.json");
+
 module.exports.run = async (bot, message, args) => {
-    let user = message.guild.member(message.mentions.users.first()) || message.guild.members.get(args[0]);
-    if (!user) user = message.author;
-    let embed = new Discord.RichEmbed()
-        .setAuthor(message.author, message.author.avatarURL)
-        .setColor(botconfig.color)
-        .setThumbnail(user.displayAvatarURL)
-        .title(user.username + '#' + user.discriminator)
-    message.channel.send(embed);
-}
+   let user =
+      message.guild.members.cache.get(args[0]) ||
+      message.guild.members.cache.find(
+         m =>
+            m.user.username == args.join(" ") ||
+            m == message.mentions.members.first()
+      );
+   if (!user) user = message.author;
+   let embed = new Discord.MessageEmbed()
+      .setAuthor(message.author.username, message.author.avatarURL())
+      .setColor(botconfig.color)
+      .setThumbnail(user.avatarURL())
+      .addField("Joined Discord at:", user.createdAt)
+      .addField("Presence:", user.presence)
+      .setTitle(user.tag);
+   message.channel.send(embed);
+};
 
 module.exports.help = {
-    name: "userinfo",
-    desc: "Shows basic user information",
-    use: "?userinfo [user]"
-}
+   name: "userinfo",
+   desc: "Shows basic user information",
+   use: "?userinfo [user]"
+};

@@ -2,33 +2,41 @@ const botconfig = require("../botconfig.json");
 const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
-    let kUser = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
-    if (!kUser) return message.channel.send("Couldn't find user.");
-    let reason = args.join(" ") || "breaking rules";
+   let member =
+      message.guild.members.cache.get(args[0]) ||
+      message.guild.members.cache.find(
+         m =>
+            m.user.username == args.join(" ") ||
+            m == message.mentions.members.first()
+      );
+   if (!member) return message.channel.send("Couldn't find user.");
+   let reason = args.join(" ") || "breaking rules";
 
-    if (!message.member.hasPermission("KICK_MEMBERS")) return message.channel.send("How about you can't kick ppl!");
-    if (kUser.hasPermission("KICK_MEMBERS")) return message.channel.send("But he is admin :/");
-    if (!kUser.kickable) return message.channel.send("I can't kick him tho");
+   if (!message.member.permissions.has("KICK_MEMBERS"))
+      return message.channel.send("How about you can't kick ppl!");
+   if (member.permissions.has("KICK_MEMBERS"))
+      return message.channel.send("But he is admin :/");
+   if (!member.kickable) return message.channel.send("I can't kick him tho");
 
-    let kickEmbed = new Discord.RichEmbed()
-        .setDescription('---===Kick===---')
-        .setColor(botconfig.ban)
-        .addField("Banned user", `${kUser}`)
-        .addField('banned by', `<@${message.author.id}>`)
-        .addField('banned in', message.createdAt)
-        .addField('reason:', reason);
+   let kickEmbed = new Discord.MessageEmbed()
+      .setDescription("---===Kick===---")
+      .setColor(botconfig.ban)
+      .addField("Banned user", `${member}`)
+      .addField("banned by", `<@${message.author.id}>`)
+      .addField("banned in", message.createdAt)
+      .addField("reason:", reason);
 
-    message.guild.member(kUser).kick(reason);
-    message.channel.send(`${kUser.user.username} has been kicked`)
+   member.kick(reason);
+   message.channel.send(`${member.user.username} has been kicked`);
 
-    let channel = message.guild.channel.find(ch => ch.name == "incidents");
-    if (!channel) return;
-    channel.send(kickEmbed)
-}
+   let channel = message.guild.channel.find(ch => ch.name == "incidents");
+   if (!channel) return;
+   channel.send(kickEmbed);
+};
 
 module.exports.help = {
-    name: "kick",
-    type: "admin",
-    desc: "Kicks a user who is not following the rules",
-    use: "?kick [user] <reason>"
-}
+   name: "kick",
+   type: "admin",
+   desc: "Kicks a user who is not following the rules",
+   use: "?kick [user] <reason>"
+};

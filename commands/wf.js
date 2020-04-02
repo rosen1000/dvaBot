@@ -5,6 +5,7 @@ const items = new WF();
 let embed;
 
 module.exports.run = async (bot, message, args) => {
+    return message.channel.send("Disabled!");
     // console.log(items.find(r => r.name == args.join(" ")));
     let item = items.find(r => r.name == args.join(" "));
     if(!item) return message.channel.send("Not found");

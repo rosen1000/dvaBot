@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const botconfig = require("../botconfig.json");
-const SelfReloadJSON = require("self-reload-json");
-let coins = new SelfReloadJSON("./coins.json");
+// const SelfReloadJSON = require("self-reload-json");
+// let coins = new SelfReloadJSON("./coins.json");
 
 module.exports.run = async (bot, message, args) => {
     // await message.delete();
@@ -55,7 +55,7 @@ module.exports.run = async (bot, message, args) => {
             // coins[message.author.id].coins = coins[message.author.id].coins + payed * 2;
         }
 
-        let embed = new Discord.RichEmbed()
+        let embed = new Discord.MessageEmbed()
         .setTitle("SLOTS!")
         .setColor(botconfig.color)
         .addField(end, `${x[0]} ${y[0]} ${z[0]}\n

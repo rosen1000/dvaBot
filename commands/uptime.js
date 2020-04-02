@@ -7,17 +7,17 @@ module.exports.run = async (bot, message, args) => {
     if(uptime <= 120){
         var format = "seconds"
     }else{
-        uptime / 60;
+        uptime /= 60;
         var format = "minutes"
     }
-    let embed = new Discord.RichEmbed()
+    let embed = new Discord.MessageEmbed()
     .setTitle("Bot's statistics")
     .setColor(botconfig.color)
     .setDescription(`\`\`\`Mem use: ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}` + mb
     +`\nUptime: ${Math.round(uptime)} ${format}`
-    +`\nUsers: ${bot.users.size}`
-    +`\nServers: ${bot.guilds.size}`
-    +`\nChannels: ${bot.channels.size}\`\`\``);
+    +`\nUsers: ${bot.users.cache.size}`
+    +`\nServers: ${bot.guilds.cache.size}`
+    +`\nChannels: ${bot.channels.cache.size}\`\`\``);
 
     message.channel.send(embed);
 }

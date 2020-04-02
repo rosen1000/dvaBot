@@ -26,8 +26,10 @@ fs.readdir("./commands/", (err, files) => {
 });
 
 bot.on("ready", async () => {
-    console.log(`${bot.user.username} is online in ${bot.guilds.size} servers ^^`);
+    console.log(`${bot.user.username} is online in ${bot.guilds.cache.size} servers ^^`);
 
+    bot.user.setActivity("Upgrading from discord.js 11 to 12");
+    return;
     const statuses = require('./statuses.json');
     bot.user.setActivity("youtube", { type: "WATCHING" });
 
@@ -106,6 +108,7 @@ bot.on("message", async message => {
     if (message.author.bot) return;
     if (message.channel.type === "dm") return;
     if (message.channel.id == "471208730688487424") return;
+    if (message.guild.id != "417384366893826049") return;
 
     let prefix = botconfig.prefix;
     let messageArray = message.content.split(" ");
