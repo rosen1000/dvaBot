@@ -10,7 +10,7 @@ module.exports = {
     run: async (bot, message, args) => {
         const animeme = await randomPuppy("animeme");
         const embed = new RichEmbed()
-            .setColor(require("../../botconfig.json").color)
+            .setColor(require("../../config.js").color)
             .setImage(animeme)
             .setTitle("Animeme!")
             .setURL("https://reddit.com/r/animemes/");

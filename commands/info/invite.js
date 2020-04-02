@@ -7,7 +7,7 @@ module.exports = {
     use: "",
     run: async (bot, message, args) => {
         let embed = RichEmbed()
-            .setColor(require("../../botconfig.json"))
+            .setColor(require("../../config.js"))
             .setTitle("Invite:")
             .setDescription("[Invite me](https://discordapp.com/api/oauth2)")
         message.channel.send(embed);

@@ -28,7 +28,7 @@ module.exports = {
 
         let channel = message.guild.channel.find(ch => ch.name.includes("log"));
         let embed = new RichEmbed()
-            .setColor(require("../../botcnofig.json").color)
+            .setColor(require("../../config.json").color)
             .setTitle("<===Ban Report===>")
             .addField("Banned member", member.user.username, true)
             .addField("Banned by", message.author, true)

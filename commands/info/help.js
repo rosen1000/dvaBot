@@ -1,6 +1,6 @@
 const { RichEmbed } = require("discord.js");
 const { stripIndents } = require("common-tags");
-const botconfig = require("../../botconfig.json");
+const botconfig = require("../../config.js");
 
 module.exports = {
     name: "help",

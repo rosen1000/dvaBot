@@ -9,7 +9,7 @@ module.exports = {
         if (!args[0]) return message.channel.send("Please tell me something");
         let feedback = args.join(" ");
         let embed = new RichEmbed()
-            .setColor(require("../../botconfig.json").color)
+            .setColor(require("../../config.js").color)
             .setAuthor(message.author.tag)
             .setThumbnail(message.author.displayAvatarURL)
             .addField("Feedback:", feedback)

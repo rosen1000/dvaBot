@@ -7,7 +7,7 @@ module.exports = {
     run: async (bot, message, args) => {
         if (!bot.member.hasPermission(require("../../botconfig.json").messages))
             return message.channel.send("Even *I* can't delete messages :(");
-        if (!message.member.hasPermission(require("../../botconfig.json").messages))
+        if (!message.member.hasPermission(require("../../config.js").messages))
             return message.channel.send("Sorry, you can't delete messages!");
         
         let number = parseInt(args[0]);

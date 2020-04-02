@@ -12,7 +12,7 @@ module.exports = {
         const random = reddits[Math.floor(Math.random() * reddits.length)];
         const meme = await randomPuppy(random);
         const embed = new RichEmbed()
-            .setColor(require("../../botconfig.json").color)
+            .setColor(require("../../config.js").color)
             .setImage(meme)
             .setTitle(`r/${random}`)
             .setURL(`https://reddit.com/r/${random}`);

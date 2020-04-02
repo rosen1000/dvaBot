@@ -1,4 +1,4 @@
-const botconfig = require("../botconfig.json");
+const botconfig = require("../config.js");
 const ms = require("ms");
 const zalgo = require("to-zalgo");
 const mongoose = require("../models/mongoose");

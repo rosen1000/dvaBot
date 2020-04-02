@@ -15,7 +15,7 @@ module.exports = {
                 .addField("Question:", question)
                 .addField("Answer:", response.data.response)
                 .setImage(response.data.url)
-                .setColor(require("../../botconfig.json").color);
+                .setColor(require("../../config.js").color);
             message.channel.send(embed);
         });
     }

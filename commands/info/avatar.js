@@ -11,7 +11,7 @@ module.exports = {
         if (!target) target = message.member;
         const embed = new RichEmbed()
             .setAuthor(target.nickname + "'s avatar")
-            .setColor(require("../../botconfig.json").color)
+            .setColor(require("../../config.js").color)
             .setImage(target.user.displayAvatarURL);
         message.channel.send(embed);
     }

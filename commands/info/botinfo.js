@@ -14,7 +14,7 @@ module.exports = {
         }
         let embed = new RichEmbed()
             .setTitle("Bot info")
-            .setColor(require("../../botconfig.json").color)
+            .setColor(require("../../config.js").color)
             .setThumbnail(bot.user.displayAvatarURL)
             .addField("Bot name:", bot.user.username)
             .addField("Created on:", formatDate(bot.user.createdAt))

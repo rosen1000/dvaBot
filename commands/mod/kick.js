@@ -28,7 +28,7 @@ module.exports = {
         let channel = message.guild.channel.find(ch => ch.inclides("log"));
         let embed = new RichEmbed()
             .setTitle("<===Kick Report===>")
-            .setColor(require("../../botconfig.json").color)
+            .setColor(require("../../config.js").color)
             .addField("Kicked member", member.user.username, true)
             .addField("Kicked by", message.author, true)
             .addField("Kicked at", message.createdAt, true)

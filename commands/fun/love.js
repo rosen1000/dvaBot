@@ -19,7 +19,7 @@ module.exports = {
         const loveIndex = Math.floor(love / 10);
         const loveMeter = "💓".repeat(loveIndex) + "💔".repeat(10 - loveIndex);
         const embed = new RichEmbed()
-            .setColor(require("../../botconfig.json").color)
+            .setColor(require("../../config.js").color)
             .setTitle(`${message.author} x ${lover}`)
             .addField(`${love}/100`, loveMeter);
         message.channel.send(embed);
