@@ -1,0 +1,30 @@
+[
+    {
+        "status": "in {{guilds.size}} servers",
+        "type": "PLAYING"
+    },
+    {
+        "status": "youtube",
+        "type": "WATCHING"
+    },
+    {
+        "status": "Overwatch",
+        "type": "PLAYING"
+    },
+    {
+        "status": "good music",
+        "type": "LISTENING"
+    },
+    {
+        "status": "with big goth anime tiddies",
+        "type": "PLAYING"
+    },
+    {
+        "status": "t̑͜͞h̾͑ͫe͋̌̆ ̵͚̿v̆̌̂oͣͤ́ḯ͌̈́d̆ͯͬ",
+        "type": "LISTENING"
+    },
+    {
+        "status": "大きなお世話",
+        "type": "PLAYING"
+    }
+]
