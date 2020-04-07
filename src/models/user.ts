@@ -1,5 +1,19 @@
-import mongoose from "mongoose";
-const userSchema = mongoose.Schema({
-    userID: String
+import * as mongoose from "mongoose";
+import { BotClient } from "./BotClient";
+
+export interface UserInterface extends mongoose.Document {
+    id: string;
+}
+
+const userSchema = new mongoose.Schema({
+    id: {
+        type: String,
+        required: true,
+        unique: true,
+    },
 });
-module.exports = mongoose.model("user", userSchema);
+
+export function getUserDB(bot: BotClient) {
+    const User = bot.mongo.model("user", userSchema);
+    return User;
+}

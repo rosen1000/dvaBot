@@ -1,5 +1,5 @@
 import { MessageEmbed } from "discord.js";
-import { formatDate } from "../../models/common";
+import { formatDate } from "../../functions/common";
 
 module.exports = {
     name: "botinfo",

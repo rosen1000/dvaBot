@@ -1,5 +1,5 @@
-import { getMember } from "../../models/common";
-import { getReaction } from "../../models/image";
+import { getMember } from "../../functions/common";
+import { getReaction } from "../../functions/image";
 
 module.exports = {
     name: "slap",

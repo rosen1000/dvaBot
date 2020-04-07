@@ -4,6 +4,7 @@
   "description": "Bot",
   "main": "index.js",
   "dependencies": {
+    "@types/mongoose": "^5.7.8",
     "@types/node": "^13.11.0",
     "ascii-table": "0.0.9",
     "axios": "^0.19.2",
@@ -25,7 +26,8 @@
   "devDependencies": {},
   "scripts": {
     "start": "cd dist && node index.js",
-    "build": "tsc"
+    "build": "tsc",
+    "clear": "rm dist/* -r"
   },
   "author": "rosen1000",
   "license": "ISC"

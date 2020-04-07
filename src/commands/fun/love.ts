@@ -1,5 +1,5 @@
 import * as Discord from "discord.js";
-import { getMember } from "../../models/common";
+import { getMember } from "../../functions/common";
 
 module.exports = {
     name: "love",
