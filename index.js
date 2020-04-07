@@ -40,8 +40,14 @@ bot.on("ready", async () => {
         let text;
         if (regex.test(status.status)) {
             text = status.status.replace(/\{{2}(.+)\}{2}/, function (match, p1) {
-                let [prop, key] = p1.split(".");
-                return bot[prop][key];
+                let props = p1.split(".");
+                if (props.length == 2) {
+                    let [prop, key] = p1.split(".");
+                    return bot[prop][key];
+                } else if (props.length == 3) {
+                    let [prop, key1, key2] = p1.split(".");
+                    return bot[prop][key1][key2];
+                }
             });
         } else {
             text = status.status;

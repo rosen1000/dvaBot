@@ -1,6 +1,6 @@
 [
     {
-        "status": "in {{guilds.size}} servers",
+        "status": "in {{guilds.cache.size}} servers",
         "type": "PLAYING"
     },
     {
