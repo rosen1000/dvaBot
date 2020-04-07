@@ -1,1 +1,1 @@
-worker: node index.js
+worker: cd dist && node index.js

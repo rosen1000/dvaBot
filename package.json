@@ -4,8 +4,10 @@
   "description": "Bot",
   "main": "index.js",
   "dependencies": {
+    "@types/node": "^13.11.0",
     "ascii-table": "0.0.9",
     "axios": "^0.19.2",
+    "chalk": "^4.0.0",
     "common-tags": "^1.8.0",
     "discord.js": "^12.1.1",
     "dotenv": "^6.2.0",
@@ -22,7 +24,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "node index.js"
+    "start": "cd dist && node index.js",
+    "build": "tsc src/index.ts"
   },
   "author": "rosen1000",
   "license": "ISC"
