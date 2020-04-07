@@ -25,7 +25,7 @@
   "devDependencies": {},
   "scripts": {
     "start": "cd dist && node index.js",
-    "build": "tsc src/index.ts"
+    "build": "tsc"
   },
   "author": "rosen1000",
   "license": "ISC"
