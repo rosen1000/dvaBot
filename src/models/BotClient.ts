@@ -7,6 +7,7 @@ import connect from "../models/mongoose";
 import { getUserDB } from "./user";
 import { getMemberDB } from "./member";
 import { getServerDB } from "./server";
+import { config } from "../config";
 
 export class BotClient extends Client {
     public commands: Map<string, Command>;
@@ -20,12 +21,14 @@ export class BotClient extends Client {
         server: getServerDB(this),
     };
 
+    public readonly config = config;
+
     private readonly path = __dirname
         .split("/")
         .slice(0, __dirname.split("/").length - 1)
         .join("/");
 
-    constructor(token: any) {
+    constructor(token: any, db: any) {
         super();
         super.login(token);
         this.commands = this.getCommands();
@@ -34,7 +37,7 @@ export class BotClient extends Client {
             if (file != "command.js")
                 require(this.path + `/handlers/${file}`)(this);
         });
-        connect(process.env.DB);
+        connect(db);
     }
 
     private getCommands(): Map<string, Command> {

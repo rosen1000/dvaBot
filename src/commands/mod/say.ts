@@ -6,13 +6,14 @@ module.exports = {
     desc: "Makes the bot say something",
     use: "[embed]",
     enabled: true,
-    run: async (bot, message, args) => {
-        if (!message.member.hasPermission("MANAGE_MESSAGES"))
-            return message.channel.send("Only members with `MANAGE_MESSAGES` can use that command :/");
-        if (args.length < 0)
-            return message.channel.send("HMM what to sayyyy");
-        
-        const color = message.guild.me.highestRole.hexColor;
+    run: async (bot, message: Discord.Message, args) => {
+        if (!message.member.permissions.has("MANAGE_MESSAGES"))
+            return message.channel.send(
+                "Only members with `MANAGE_MESSAGES` can use that command :/"
+            );
+        if (args.length < 0) return message.channel.send("HMM what to sayyyy");
+
+        const color = message.guild.me.roles.highest.hexColor;
         if (args[0].toLowerCase() == "embed") {
             let embed = new Discord.MessageEmbed()
                 .setDescription(args.slice(1).join(" "))
@@ -21,5 +22,5 @@ module.exports = {
         } else {
             message.channel.send(args.join(" "));
         }
-    }
-}
+    },
+};

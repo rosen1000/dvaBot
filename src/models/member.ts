@@ -1,13 +1,14 @@
 import * as mongoose from "mongoose";
 import { BotClient } from "./BotClient";
+import { Message } from "discord.js";
 
-interface MemberInterface extends mongoose.Document {
+export interface MemberInterface extends mongoose.Document {
     userID: string;
     guildID: string
     coins: number
     level: number
     xp: number
-    marry: string
+    marry?: string
     notifyCoinDrop: boolean
     seenCoinDropHint: boolean
     warns: number
@@ -18,7 +19,21 @@ export function getMemberDB(bot: BotClient) {
     return Member;
 }
 
-const memberSchema = new mongoose.Schema({
+export function createMember(message: Message): MemberInterface {
+    return <MemberInterface>{
+        userID: message.author.id,
+        guildID: message.guild.id,
+        coins: 0,
+        level: 0,
+        xp: 0,
+        marry: null,
+        notifyCoinDrop: true,
+        seenCoinDropHint: false,
+        warns: 0
+    }
+}
+
+export const memberSchema = new mongoose.Schema({
     userID: String,
     guildID: String,
     coins: Number,

@@ -1,12 +1,18 @@
-import { MessageEmbed } from "discord.js";
+import { MessageEmbed, Message } from "discord.js";
 import axios from "axios";
+import { Command } from "../../models/Command";
+import { BotClient } from "../../models/BotClient";
 
-module.exports = {
-    name: "8ball",
-    type: "fun",
-    desc: "Ask the 8ball something you wonder about",
-    use: "<question>",
-    run: async (bot ,message, args) => {
+export class EightBall extends Command {
+    constructor(bot: BotClient) {
+        super(bot, {
+            name: "8ball",
+            type: "fun",
+            description: "Ask the 8ball something you wonder about",
+            usage: "<question>",
+        })
+    }
+    run(message: Message, args: string[]) {
         let question = args.join(" ");
         if (!question) return message.channel.send("You haven't asked me something!");
 

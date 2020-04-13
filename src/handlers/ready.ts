@@ -10,6 +10,6 @@ module.exports = (bot: BotClient) => {
         setInterval(() => {
             let status = getStatus(bot);
             bot.user.setActivity(status.status, { type: status.type });
-        }, parseInt(ms("30m").toString()));
+        }, 1800000); // 30 minutes
     });
 };

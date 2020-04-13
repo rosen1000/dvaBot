@@ -7,6 +7,7 @@ export default (db: string) => {
             useNewUrlParser: true,
             useFindAndModify: false,
             useUnifiedTopology: true,
+            useCreateIndex: true
         }).then(() => {
             console.log("Connected to DB!");
         }).catch(e => {

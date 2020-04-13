@@ -1,3 +1,4 @@
+import { config } from "../../config";
 module.exports = {
     name: "purge",
     aliases: ["clear"],
@@ -5,9 +6,9 @@ module.exports = {
     desc: "Clears the chat from spam (must be less than 2 weeks ago)",
     use: "<number>",
     run: async (bot, message, args) => {
-        if (!bot.member.hasPermission(require("../../botconfig.json").messages))
+        if (!bot.member.permissions.has(config.messages))
             return message.channel.send("Even *I* can't delete messages :(");
-        if (!message.member.hasPermission(require("../../config.js").messages))
+        if (!message.member.permissions.has(config.color))
             return message.channel.send("Sorry, you can't delete messages!");
         
         let number = parseInt(args[0]);
