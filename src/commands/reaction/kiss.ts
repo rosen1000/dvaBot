@@ -16,7 +16,7 @@ module.exports = class Kiss extends Command {
     }
     async run(message: Message, args: string[]) {
         const embed = await getReaction(this.name);
-        const target = getMember(message, args[0]);
+        const target = getMember(message, args);
         if (target) embed.setDescription(`${message.member} kissed ${target}`);
         else embed.setDescription(`${message.member} <.< *kisses you*`);
         message.channel.send(embed);

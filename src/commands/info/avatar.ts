@@ -13,7 +13,7 @@ module.exports = class Avatar extends Command {
         });
     }
     run(message: Message, args: string[]) {
-        let target = getMember(message, args[0]);
+        let target = getMember(message, args);
         if (!target) target = message.member;
         const embed = new MessageEmbed()
             .setAuthor(target.nickname + "'s avatar")

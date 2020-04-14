@@ -16,7 +16,7 @@ module.exports = class Cuddle extends Command {
     }
     async run(message: Message, args: string[]) {
         const embed = await getReaction(this.name);
-        const target = getMember(message, args[0]);
+        const target = getMember(message, args);
         if (target) embed.setDescription(`${target} you have been cuddled uwu`);
         else
             embed.setDescription(

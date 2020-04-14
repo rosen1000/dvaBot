@@ -55,7 +55,7 @@ module.exports = class Egg extends Command {
                 "🥚 " + player1egg.broken() ? "is broken!" : "wins!"
             )
             .addField(
-                getMember(message, args[0]) || this.bot.user,
+                getMember(message, args) || this.bot.user,
                 "🥚 " + player1egg.broken() ? "is broken!" : "wins!"
             );
         message.channel.send(embed);

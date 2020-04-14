@@ -16,7 +16,7 @@ module.exports = class Pat extends Command {
     }
     async run(message: Message, args: string[]) {
         const embed = await getReaction(this.name);
-        const target = getMember(message, args[0]);
+        const target = getMember(message, args);
         if (target) embed.setDescription(`${target} now has inner piece`);
         else embed.setDescription(`Pati-py pat pat`);
         message.channel.send(embed);

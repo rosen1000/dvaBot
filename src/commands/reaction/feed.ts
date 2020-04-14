@@ -16,7 +16,7 @@ module.exports = class Feed extends Command {
     }
     async run(message: Message, args: string[]) {
         const embed = await getReaction(this.name);
-        const target = getMember(message, args[0]);
+        const target = getMember(message, args);
         if (target)
             embed.setDescription(
                 `${target} you got fed with ${args[1] ? args[1] : "spaghetti"}`

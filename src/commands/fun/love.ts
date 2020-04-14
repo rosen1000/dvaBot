@@ -15,7 +15,7 @@ module.exports = class Love extends Command {
         });
     }
     run(message: Discord.Message, args: string[]) {
-        let lover = getMember(message, args[0]);
+        let lover = getMember(message, args);
         if (lover) {
             return message.channel.send("Who is the lucky one :)");
         } else if (message.author.id == lover.id) {

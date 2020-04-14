@@ -16,7 +16,7 @@ module.exports = class User extends Command {
         });
     }
     run(message: Message, args: string[]) {
-        const member = getMember(message, args.join(" ")) || message.member;
+        const member = getMember(message, args) || message.member;
         const createdAt = formatDate(member.user.createdAt);
         const joinedAt = formatDate(member.joinedAt);
         const roles = member.roles.cache.map((r) => r).join(", ") || "none";

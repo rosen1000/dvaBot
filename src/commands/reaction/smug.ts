@@ -15,7 +15,7 @@ module.exports = class Smug extends Command {
     }
     async run(message, args) {
         const embed = await getReaction(this.name);
-        const target = getMember(message, args[0]);
+        const target = getMember(message, args);
         if (target)
             embed.setDescription(`${message.member} smugged on ${target}`);
         else embed.setDescription(`😏😏😏`);

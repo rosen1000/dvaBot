@@ -22,7 +22,7 @@ module.exports = class Kick extends Command {
                 "Psst... Tell the admins that i can't kick..."
             );
         if (!args[0]) return message.channel.send("Who should i kick again?");
-        let member = getMember(message, args[0]);
+        let member = getMember(message, args);
         if (!member) message.channel.send("Who should i kick again?");
 
         if (message.author.id == member.id)

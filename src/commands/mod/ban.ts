@@ -22,7 +22,7 @@ module.exports = class Ban extends Command {
                 "Psst... Tell the admins that i can't ban..."
             );
         if (!args[0]) return message.channel.send("Who should i ban again?");
-        let member = getMember(message, args[0]);
+        let member = getMember(message, args);
         if (!member) message.channel.send("Who should i ban again?");
 
         if (message.author.id == member.id)

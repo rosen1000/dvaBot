@@ -2,7 +2,7 @@ import { getMember } from "../../functions/common";
 import { getReaction } from "../../functions/image";
 import { Command } from "../../models/Command";
 import { BotClient } from "../../models/BotClient";
-import { Message } from "discord.js";
+import { Message, GuildMember } from "discord.js";
 
 module.exports = class Hug extends Command {
     constructor(bot: BotClient) {
@@ -16,7 +16,8 @@ module.exports = class Hug extends Command {
     }
     async run(message: Message, args: string[]) {
         const embed = await getReaction(this.name);
-        const target = getMember(message, args[0]);
+        const target: GuildMember = getMember(message, args);
+        console.log(target)
         if (target)
             embed.setDescription(
                 `${message.member} hugged ${target}, aww they look cute`

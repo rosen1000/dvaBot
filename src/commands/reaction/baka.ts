@@ -16,7 +16,7 @@ module.exports = class Baka extends Command {
     }
     async run(message: Message, args: string[]) {
         const embed = await getReaction(this.name);
-        const target = getMember(message, args[0]);
+        const target = getMember(message, args);
         if (target)
             embed.setDescription(`${target} you just got :b:aKa'd! HA!`);
         else embed.setDescription(`b-baka!`);

@@ -15,7 +15,7 @@ module.exports = class Tickle extends Command {
     }
     async run(message, args) {
         const embed = await getReaction(this.name);
-        const target = getMember(message, args[0]);
+        const target = getMember(message, args);
         if (target)
             embed.setDescription(
                 `${message.member} tickled ${target}, they can't control themselfs!`
