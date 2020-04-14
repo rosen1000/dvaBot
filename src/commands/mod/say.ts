@@ -1,12 +1,18 @@
 import * as Discord from "discord.js";
+import { Command } from "../../models/Command";
+import { BotClient } from "../../models/BotClient";
 
-module.exports = {
-    name: "say",
-    category: "mod",
-    desc: "Makes the bot say something",
-    use: "[embed]",
-    enabled: true,
-    run: async (bot, message: Discord.Message, args) => {
+module.exports = class Say extends Command {
+    constructor(bot: BotClient) {
+        super(bot, {
+            name: "say",
+            type: "mod",
+            description: "Makes the bot say something",
+            usage: "[embed]",
+            enabled: true,
+        });
+    }
+    run(message: Discord.Message, args: string[]) {
         if (!message.member.permissions.has("MANAGE_MESSAGES"))
             return message.channel.send(
                 "Only members with `MANAGE_MESSAGES` can use that command :/"
@@ -22,5 +28,5 @@ module.exports = {
         } else {
             message.channel.send(args.join(" "));
         }
-    },
+    }
 };

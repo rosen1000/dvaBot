@@ -10,6 +10,7 @@ module.exports = class Balance extends Command {
             type: "economy",
             aliases: ["money", "coins"],
             description: "Check your current money",
+            enabled: true,
         });
     }
     run(message: Message, args: string[]) {
@@ -26,6 +27,6 @@ module.exports = class Balance extends Command {
                 message.channel.send(`You have ${member.coins} coins!`);
             }
         );
-        message.channel.send("ping")
+        message.channel.send("ping");
     }
-}
+};

@@ -1,9 +1,18 @@
-module.exports = {
-    name: "dice",
-    type: "fun",
-    desc: "Roll a dice with x sides (for all your DnD purposes)",
-    use: "[sides]/[<dices>d<sides>]",
-    run: async (bot, message, args) => {
+import { Command } from "../../models/Command";
+import { BotClient } from "../../models/BotClient";
+import { Message } from "discord.js";
+
+module.exports = class Dice extends Command {
+    constructor(bot: BotClient) {
+        super(bot, {
+            name: "dice",
+            type: "fun",
+            description: "Roll a dice with x sides (for all your DnD purposes)",
+            usage: "[sides]/[<dices>d<sides>]",
+            enabled: true,
+        });
+    }
+    run(message: Message, args: string[]) {
         let sides = 6;
         let dices = 1;
         if (args[0]) {
@@ -20,7 +29,7 @@ module.exports = {
         for (let i = 0; i < dices; i++) {
             output.push("🎲 " + Math.floor(Math.random() * sides + 1));
         }
-        
+
         message.channel.send(output.join(", "));
     }
-}
+};

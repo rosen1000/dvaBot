@@ -1,12 +1,18 @@
-import { MessageEmbed } from "discord.js";
+import { MessageEmbed, Message } from "discord.js";
 import { getMember } from "../../functions/common";
-module.exports = {
-    name: "avatar",
-    category: "info",
-    desc: "Shows user's avatar",
-    use: "[username | id | mention | deffault=author]",
-    enabled: true,
-    run: async (bot, message, args) => {
+import { Command } from "../../models/Command";
+import { BotClient } from "../../models/BotClient";
+module.exports = class Avatar extends Command {
+    constructor(bot: BotClient) {
+        super(bot, {
+            name: "avatar",
+            type: "info",
+            description: "Shows user's avatar",
+            usage: "[username | id | mention | deffault=author]",
+            enabled: true,
+        });
+    }
+    run(message: Message, args: string[]) {
         let target = getMember(message, args[0]);
         if (!target) target = message.member;
         const embed = new MessageEmbed()
@@ -15,4 +21,4 @@ module.exports = {
             .setImage(target.user.avatarURL());
         message.channel.send(embed);
     }
-}
+};

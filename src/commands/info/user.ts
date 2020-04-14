@@ -1,39 +1,58 @@
 import { getMember, formatDate } from "../../functions/common";
-import { MessageEmbed } from "discord.js";
+import { MessageEmbed, Message } from "discord.js";
 import { stripIndents } from "common-tags";
+import { Command } from "../../models/Command";
+import { BotClient } from "../../models/BotClient";
 
-module.exports = {
-    name: "user",
-    aliases: ["who", "whois", "userinfo", "member", "memberinfo"],
-    category: "info",
-    desc: "Shows information about a user (not a member)",
-    use: "[username | id | mention | default=author]",
-    enabled: true,
-    run: async (bot, message, args) => {
+module.exports = class User extends Command {
+    constructor(bot: BotClient) {
+        super(bot, {
+            name: "user",
+            aliases: ["who", "whois", "userinfo", "member", "memberinfo"],
+            type: "info",
+            description: "Shows information about a user (not a member)",
+            usage: "[username | id | mention | default=author]",
+            enabled: true,
+        });
+    }
+    run(message: Message, args: string[]) {
         const member = getMember(message, args.join(" ")) || message.member;
-        const createdAt = formatDate(member.user.joinedTimestamp);
-        const joinedAt = formatDate(member.joinedTimestamp);
-        const roles = member.roles
-            .filter(r => r.id !== message.channel.guild.id)
-            .map(r => r)
-            .join(", ") || "none";
-        
+        const createdAt = formatDate(member.user.createdAt);
+        const joinedAt = formatDate(member.joinedAt);
+        const roles = member.roles.cache.map((r) => r).join(", ") || "none";
+
         let embed = new MessageEmbed()
-            .setFooter(member.displayName, member.user.displayAvatarURL)
-            .setThumbnail(member.user.displayAvatarURL)
-            .setColor(member.displayHexColor === "#000000" ? "#ffffff" : member.displayHexColor)
-            .addField("Member information:", stripIndents`**> Nickname:** ${member.displayName}
+            .setFooter(member.displayName, member.user.displayAvatarURL())
+            .setThumbnail(member.user.displayAvatarURL())
+            .setColor(
+                member.displayHexColor === "#000000"
+                    ? "#ffffff"
+                    : member.displayHexColor
+            )
+            .addField(
+                "Member information:",
+                stripIndents`**> Nickname:** ${member.displayName}
             **> Joined at:** ${joinedAt}
-            **> Roles:** ${roles}`, true)
-            .addField("User information:", stripIndents`**> ID:** ${member.user.id}
+            **> Roles:** ${roles}`,
+                true
+            )
+            .addField(
+                "User information:",
+                stripIndents`**> ID:** ${member.user.id}
             **> Username:** ${member.user.username}
             **> Tag:** ${member.user.tag}
-            **> Created at:** ${createdAt}`, true)
+            **> Created at:** ${createdAt}`,
+                true
+            )
             .setTimestamp();
-        if (member.user.presence.game) {
-            embed.addField("Currently playing", stripIndents`**> Name:** ${member.user.presence.game.name}`, true);
+        if (member.user.presence) {
+            embed.addField(
+                "Currently playing",
+                stripIndents`**> Name:** ${member.user.presence.activities[0].name}`,
+                true
+            );
         }
 
         message.channel.send(embed);
     }
-}
+};
