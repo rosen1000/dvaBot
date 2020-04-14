@@ -3,7 +3,7 @@ import { Command } from "../../models/Command";
 import { Message } from "discord.js";
 import { MemberInterface, createMember } from "../../models/member";
 
-export class Balance extends Command {
+module.exports = class Balance extends Command {
     constructor(bot: BotClient) {
         super(bot, {
             name: "balance",
@@ -13,7 +13,7 @@ export class Balance extends Command {
         });
     }
     run(message: Message, args: string[]) {
-        console.log("ok");
+        console.log(0);
         this.bot.db.member.findOne(
             { id: message.author.id },
             (err: Error, member: MemberInterface) => {

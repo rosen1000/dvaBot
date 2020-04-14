@@ -30,9 +30,7 @@ module.exports = (bot: BotClient) => {
             else if (bot.aliases.has(cmd))
                 command = bot.commands.get(bot.aliases.get(cmd)!);
 
-            if (command) {
-                console.log(command)
-                command.run(message, args);}
+            if (command) command.run(message, args);
 
             //Server specific commands
             if (message.guild.id == "556540661843886092") {
