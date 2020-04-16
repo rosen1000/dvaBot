@@ -1,7 +1,6 @@
 import { MessageEmbed, Message } from "discord.js";
 import { Command } from "../../models/Command";
 import { BotClient } from "../../models/BotClient";
-import { config } from "../../config";
 
 module.exports = class Invite extends Command {
     constructor(bot: BotClient) {

@@ -2,12 +2,8 @@ import * as Discord from "discord.js";
 import { config } from "../config";
 import * as ms from "ms";
 import * as zalgo from "to-zalgo";
-import * as mongoose from "../models/mongoose";
-import * as memberSchema from "../models/member";
-import * as serverSchema from "../models/server";
 import { BotClient } from "../models/BotClient";
 import { Command } from "../models/Command";
-let xpCooldowns;
 
 module.exports = (bot: BotClient) => {
     bot.on(

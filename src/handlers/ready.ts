@@ -1,4 +1,3 @@
-import ms from "ms";
 import { BotClient } from "../models/BotClient";
 import { getStatus } from "../functions/statuses";
 

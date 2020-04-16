@@ -2,4 +2,4 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 
-const bot = new BotClient(process.env.TOKEN, process.env.DB);
+new BotClient(process.env.TOKEN, process.env.DB);

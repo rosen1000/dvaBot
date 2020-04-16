@@ -1,4 +1,3 @@
-import { config } from "../../config";
 import { Command } from "../../models/Command";
 import { BotClient } from "../../models/BotClient";
 import { Message } from "discord.js";

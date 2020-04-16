@@ -1,5 +1,4 @@
 import { MessageEmbed, Message } from "discord.js";
-import { stripIndents } from "common-tags";
 import { config } from "../../config.js";
 import { Command } from "../../models/Command.js";
 import { BotClient } from "../../models/BotClient.js";

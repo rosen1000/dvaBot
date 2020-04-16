@@ -1,6 +1,6 @@
 import { Command } from "../../models/Command";
 import { BotClient } from "../../models/BotClient";
-import { Message, TextChannel } from "discord.js";
+import { Message } from "discord.js";
 import { getMember } from "../../functions/common";
 import { MemberInterface, createMember } from "../../models/member";
 

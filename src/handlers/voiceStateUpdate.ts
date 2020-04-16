@@ -1,5 +1,5 @@
 import { BotClient } from "../models/BotClient";
-import { TextChannel, VoiceChannel } from "discord.js";
+import { VoiceChannel } from "discord.js";
 
 module.exports = (bot: BotClient) => {
     bot.on("voiceStateUpdate", async (oldMember, newMember) => {

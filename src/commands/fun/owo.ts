@@ -1,4 +1,3 @@
-import * as Discord from "discord.js";
 import axios from "axios";
 import { Command } from "../../models/Command";
 import { BotClient } from "../../models/BotClient";
