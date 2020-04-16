@@ -1,7 +1,7 @@
 import * as Discord from "discord.js";
-import randomPuppy from "random-puppy";
 import { Command } from "../../models/Command";
 import { BotClient } from "../../models/BotClient";
+import axios from "axios";
 
 module.exports = class Animeme extends Command {
     constructor(bot: BotClient) {
@@ -14,12 +14,18 @@ module.exports = class Animeme extends Command {
         });
     }
     async run(message: Discord.Message, args: string[]) {
-        const animeme = await randomPuppy("animeme");
+        const { data } = await axios.get("https://reddit.com/r/animemes/hot.json", {
+            headers: { limit: 200 },
+        });
+        const animeme = data.data.children;
+        let meme = animeme[Math.round(Math.random() * animeme.length)].data;
         const embed = new Discord.MessageEmbed()
-            .setColor(require("../../config.js").color)
-            .setImage(animeme)
+            .setColor(this.bot.config.color)
             .setTitle("Animeme!")
-            .setURL("https://reddit.com/r/animemes/");
+            .setTitle(meme.title)
+            .setURL(meme.url)
+            .setImage(meme.url)
+            .setFooter("Animemes by /r/animemes");
         message.channel.send(embed);
     }
 };
