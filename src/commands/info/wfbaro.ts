@@ -11,6 +11,7 @@ module.exports = class Wfbaro extends Command {
             description: "Shows when Baro will come or what he sells",
             usage: "",
             enabled: false,
+            hidden: false,
         });
     }
     run(message: Discord.Message, args: string[]) {

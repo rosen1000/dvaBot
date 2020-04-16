@@ -16,7 +16,7 @@ module.exports = class Love extends Command {
     }
     run(message: Discord.Message, args: string[]) {
         let lover = getMember(message, args);
-        if (lover) {
+        if (!lover) {
             return message.channel.send("Who is the lucky one :)");
         } else if (message.author.id == lover.id) {
             return message.channel.send("I love chu dear");
@@ -26,8 +26,8 @@ module.exports = class Love extends Command {
         const loveMeter = "💓".repeat(loveIndex) + "💔".repeat(10 - loveIndex);
         const embed = new Discord.MessageEmbed()
             .setColor(require("../../config.js").color)
-            .setTitle(`${message.author} x ${lover}`)
-            .addField(`${love}/100`, loveMeter);
+            .setTitle(`${message.member.displayName} x ${lover.displayName}`)
+            .addField(`${Math.round(love)}/100`, loveMeter);
         message.channel.send(embed);
     }
 };

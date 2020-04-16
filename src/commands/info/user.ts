@@ -16,7 +16,7 @@ module.exports = class User extends Command {
         });
     }
     run(message: Message, args: string[]) {
-        const member = getMember(message, args) || message.member;
+        const member = getMember(message, args) ?? message.member;
         const createdAt = formatDate(member.user.createdAt);
         const joinedAt = formatDate(member.joinedAt);
         const roles = member.roles.cache.map((r) => r).join(", ") || "none";
@@ -25,13 +25,11 @@ module.exports = class User extends Command {
             .setFooter(member.displayName, member.user.displayAvatarURL())
             .setThumbnail(member.user.displayAvatarURL())
             .setColor(
-                member.displayHexColor === "#000000"
-                    ? "#ffffff"
-                    : member.displayHexColor
+                member.displayHexColor === "#000000" ? "#ffffff" : member.displayHexColor
             )
             .addField(
                 "Member information:",
-                stripIndents`**> Nickname:** ${member.displayName}
+                stripIndents`**> Nickname:** ${member.nickname || "none"}
             **> Joined at:** ${joinedAt}
             **> Roles:** ${roles}`,
                 true
@@ -45,7 +43,7 @@ module.exports = class User extends Command {
                 true
             )
             .setTimestamp();
-        if (member.user.presence) {
+        if (member.user.presence.activities.length != 0) {
             embed.addField(
                 "Currently playing",
                 stripIndents`**> Name:** ${member.user.presence.activities[0].name}`,

@@ -16,7 +16,7 @@ module.exports = class Feedback extends Command {
         if (!args[0]) return message.channel.send("Please tell me something");
         let feedback = args.join(" ");
         let embed = new MessageEmbed()
-            .setColor(require("../../config.js").color)
+            .setColor(this.bot.config.color)
             .setAuthor(message.author.tag)
             .setThumbnail(message.author.displayAvatarURL())
             .addField("Feedback:", feedback)

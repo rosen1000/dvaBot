@@ -3,20 +3,12 @@ import { Message, GuildMember, User, EmojiResolvable } from "discord.js";
 export { getMember, formatDate, promptMessage };
 
 function getMember(message: Message, id: string[]): GuildMember {
-    let target: GuildMember;
     if (id) {
-        target = message.guild.members.cache.get(id[0]);
+        return message.guild.members.cache.get(id[0]);
     }
-    if (!target && message.mentions.members) {
-        target = message.mentions.members.first();
+    if (message.mentions.members) {
+        return message.mentions.members.first();
     }
-    if (!target && id) {
-        target = message.guild.members.cache.find((m) => {
-            return m.displayName.includes(id.join(" "));
-        });
-    }
-
-    return target;
 }
 
 function formatDate(date: Date): string {

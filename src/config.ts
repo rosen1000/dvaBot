@@ -1,5 +1,5 @@
 export let config = {
-    prefix: "?",
+    prefix: "n.",
     color: "#15f153",
     kick: "#e56b00",
     ban: "#bc0000",

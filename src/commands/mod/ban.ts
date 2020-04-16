@@ -14,20 +14,20 @@ module.exports = class Ban extends Command {
             enabled: true,
         });
     }
-    run(message, args) {
+    run(message: Discord.Message, args) {
         if (!message.member.hasPermission("BAN_MEMBERS"))
             return message.channel.send("But you can't ban members .-.");
         if (!message.guild.me.hasPermission("BAN_MEMBERS"))
-            return message.channel.send(
-                "Psst... Tell the admins that i can't ban..."
-            );
+            return message.channel.send("Psst... Tell the admins that i can't ban...");
+
         if (!args[0]) return message.channel.send("Who should i ban again?");
+
         let member = getMember(message, args);
         if (!member) message.channel.send("Who should i ban again?");
 
         if (message.author.id == member.id)
             return message.channel.send("There's a leave button 'ya know?");
-        if (member.bannable)
+        if (!member.bannable)
             return message.channel.send(
                 "I can't ban him tho.. He is more powerfull than me"
             );
@@ -40,9 +40,7 @@ module.exports = class Ban extends Command {
         });
         message.channel.send("Done! " + member.user.username + " is done for");
 
-        let channel = message.guild.channel.find((ch) =>
-            ch.name.includes("log")
-        );
+        let channel = <Discord.TextChannel>message.guild.channels.cache.find((ch) => ch.name.includes("log"));
         let embed = new Discord.MessageEmbed()
             .setColor(require("../../config.json").color)
             .setTitle("<===Ban Report===>")
@@ -50,11 +48,7 @@ module.exports = class Ban extends Command {
             .addField("Banned by", message.author, true)
             .addField("Banned at", message.createdAt, true)
             .addField("Channel", message.channel, true)
-            .addField(
-                "Reason",
-                args.slice(1).join(" ") || "Breaking rules",
-                true
-            );
+            .addField("Reason", args.slice(1).join(" ") || "Breaking rules", true);
         if (channel) channel.send(embed);
     }
 };

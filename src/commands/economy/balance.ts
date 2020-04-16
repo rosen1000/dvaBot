@@ -13,16 +13,13 @@ module.exports = class Balance extends Command {
             enabled: true,
         });
     }
-    run(message: Message, args: string[]) {
-        console.log(0);
+    async run(message: Message, args: string[]) {
         this.bot.db.member.findOne(
             { id: message.author.id },
             (err: Error, member: MemberInterface) => {
+                if (err) return console.log(err);
                 if (!member) {
-                    member = createMember(message);
-                    member.save((e) => {
-                        if (e) throw e;
-                    });
+                    member = <MemberInterface>createMember(this.bot, message);
                 }
                 message.channel.send(`You have ${member.coins} coins!`);
             }

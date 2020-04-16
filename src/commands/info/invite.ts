@@ -1,6 +1,7 @@
 import { MessageEmbed, Message } from "discord.js";
 import { Command } from "../../models/Command";
 import { BotClient } from "../../models/BotClient";
+import { config } from "../../config";
 
 module.exports = class Invite extends Command {
     constructor(bot: BotClient) {
@@ -12,11 +13,11 @@ module.exports = class Invite extends Command {
             enabled: true,
         });
     }
-    run(message: Message, args: string[]) {
+    async run(message: Message, args: string[]) {
         let embed = new MessageEmbed()
-            .setColor(require("../../config.js"))
+            .setColor(this.bot.config.color)
             .setTitle("Invite:")
-            .setDescription(`[Invite me](${this.bot.generateInvite("ADMINISTRATOR")})`);
+            .setDescription(`[Invite me ❤️](${await this.bot.generateInvite("ADMINISTRATOR")})`);
         message.channel.send(embed);
     }
 };

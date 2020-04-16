@@ -29,7 +29,7 @@ function getAll(bot: BotClient) {
     let commands = (category) => {
         let output: Array<string> = [];
         bot.commands.forEach((cmd) => {
-            if (cmd.type == category)
+            if (cmd.type == category && !cmd.hidden)
                 output.push(`> \`${bot.config.prefix}${cmd.name}\` - ${cmd.description}`);
         });
         return output.join("\n");
@@ -51,6 +51,7 @@ function getCommand(bot: BotClient, input) {
     let info;
 
     if (cmd.name) info = `**Command:** \`${cmd.name}\``;
+    //TODO: dont show aliases when they dont exist
     if (cmd.aliases != [])
         info += `\n**Aliases:** ${cmd.aliases.map((a) => `\`${a}\``).join(", ")}`;
     if (cmd.description) info += `\n**Description:** ${cmd.description}`;
