@@ -24,29 +24,26 @@ module.exports = class Help extends Command {
     }
 };
 
-function getAll(bot) {
+function getAll(bot: BotClient) {
     let embed = new MessageEmbed().setColor(config.color);
     let commands = (category) => {
-        return bot.commands
-            .filter((cmd) => cmd.category == category)
-            .map((cmd) => `> \`${cmd.name}\` - ${cmd.desc}`)
-            .join("\n");
+        let output: Array<string> = [];
+        bot.commands.forEach((cmd) => {
+            if (cmd.type == category)
+                output.push(`> \`${bot.config.prefix}${cmd.name}\` - ${cmd.description}`);
+        });
+        return output.join("\n");
     };
 
     let info = bot.categories
-        .map(
-            (cat) =>
-                stripIndents`**${
-                    cat[0].toUpperCase() + cat.slice(1)
-                }** \n${commands(cat)}`
-        )
+        .map((cat) => `**${cat[0].toUpperCase() + cat.slice(1)}** \n${commands(cat)}\n​`)
         .reduce((string, cat) => string + "\n" + cat);
 
     embed.setDescription(info);
     return embed;
 }
 
-function getCommand(bot, input) {
+function getCommand(bot: BotClient, input) {
     let embed = new MessageEmbed().setColor(config.color);
     let cmd =
         bot.commands.get(input.toLowerCase()) ||
@@ -54,13 +51,11 @@ function getCommand(bot, input) {
     let info;
 
     if (cmd.name) info = `**Command:** \`${cmd.name}\``;
-    if (cmd.aliases)
-        info += `\n**Aliases:** ${cmd.aliases
-            .map((a) => `\`${a}\``)
-            .join(", ")}`;
-    if (cmd.desc) info += `\n**Description:** ${cmd.desc}`;
-    if (cmd.use) {
-        info += `\n**Usage:** ${config.prefix}${cmd.name}${cmd.use}`;
+    if (cmd.aliases != [])
+        info += `\n**Aliases:** ${cmd.aliases.map((a) => `\`${a}\``).join(", ")}`;
+    if (cmd.description) info += `\n**Description:** ${cmd.description}`;
+    if (cmd.usage) {
+        info += `\n**Usage:** ${config.prefix}${cmd.name} ${cmd.usage}`;
         embed.setFooter("<> is required and [] is optional");
     }
 

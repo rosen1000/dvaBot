@@ -15,6 +15,7 @@ class Command {
     readonly bot: BotClient;
 
     readonly name: string;
+    readonly type: string;
     readonly aliases: Array<string>;
     readonly usage: string;
     readonly description: string;
@@ -24,6 +25,7 @@ class Command {
     constructor(bot: BotClient, data: CommandData) {
         this.bot = bot;
         this.name = data.name;
+        this.type = data.type;
         this.aliases = data.aliases ?? [];
         this.usage = data.usage ?? "";
         this.description = data.description;
