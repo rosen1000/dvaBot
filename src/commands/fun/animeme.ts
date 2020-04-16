@@ -7,6 +7,7 @@ module.exports = class Animeme extends Command {
     constructor(bot: BotClient) {
         super(bot, {
             name: "animeme",
+            aliases: ["animemes"],
             type: "fun",
             description: "Posts random meme from r/animemes",
             usage: "animeme",
@@ -15,7 +16,7 @@ module.exports = class Animeme extends Command {
     }
     async run(message: Discord.Message, args: string[]) {
         const { data } = await axios.get("https://reddit.com/r/animemes/hot.json", {
-            headers: { limit: 200 },
+            headers: { limit: 500 },
         });
         const animeme = data.data.children;
         let meme = animeme[Math.round(Math.random() * animeme.length)].data; // TODO: sometimes cannot read data from undefined
