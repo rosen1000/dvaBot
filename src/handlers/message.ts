@@ -15,8 +15,8 @@ module.exports = (bot: BotClient) => {
         async (message): Promise<void> => {
             if (message.author.bot) return;
             if (message.channel.type === "dm") return;
-
             let prefix = config.prefix;
+            const isCommand = message.content.startsWith(prefix);
             const args: Array<string> = message.content
                 .slice(prefix.length)
                 .trim()
@@ -26,8 +26,8 @@ module.exports = (bot: BotClient) => {
 
             if (cmd.length == 0) return;
 
-            if (bot.commands.has(cmd)) command = bot.commands.get(cmd);
-            else if (bot.aliases.has(cmd))
+            if (isCommand && bot.commands.has(cmd)) command = bot.commands.get(cmd);
+            else if (isCommand && bot.aliases.has(cmd))
                 command = bot.commands.get(bot.aliases.get(cmd)!);
 
             if (command) command.run(message, args);
@@ -80,9 +80,7 @@ module.exports = (bot: BotClient) => {
             if (message.guild.id == "609041726094704665") {
                 let punish = async function (msg, reason) {
                     let member = msg.guild.member(msg.author);
-                    let currentRole = member.roles.find((r) =>
-                        r.name.includes("strike")
-                    );
+                    let currentRole = member.roles.find((r) => r.name.includes("strike"));
                     let nextLevel = currentRole.name.charAt(7);
                     nextLevel++;
                     let warningChannel = msg.guild.channels.find(
@@ -107,9 +105,7 @@ module.exports = (bot: BotClient) => {
                             .setColor(config.color)
                             .setThumbnail(msg.author.avatarURL);
                     } else if (nextLevel == 4) {
-                        let muteRole = msg.guild.roles.find(
-                            (r) => r.name == "muted"
-                        );
+                        let muteRole = msg.guild.roles.find((r) => r.name == "muted");
                         if (!muteRole) {
                             try {
                                 muteRole = await msg.guild.createRole({
@@ -118,13 +114,10 @@ module.exports = (bot: BotClient) => {
                                     permission: [],
                                 });
                                 msg.guild.forEach(async (channel, id) => {
-                                    await channel.overwritePermissions(
-                                        muteRole,
-                                        {
-                                            SEND_MESSSAGES: false,
-                                            ADD_REACTIONS: false,
-                                        }
-                                    );
+                                    await channel.overwritePermissions(muteRole, {
+                                        SEND_MESSSAGES: false,
+                                        ADD_REACTIONS: false,
+                                    });
                                 });
                             } catch (e) {
                                 if (e) console.log(e.stack);
@@ -139,9 +132,7 @@ module.exports = (bot: BotClient) => {
 
                         setTimeout(() => {
                             msg.author.removeRole(muteRole);
-                            msg.author.send(
-                                "You have been unmuted in " + msg.guild.name
-                            );
+                            msg.author.send("You have been unmuted in " + msg.guild.name);
                         }, ms("1d"));
 
                         embed = new Discord.MessageEmbed()
@@ -187,11 +178,7 @@ module.exports = (bot: BotClient) => {
                     "610565473502756901",
                 ];
                 if (!ignoredIDs.includes(message.channel.id)) {
-                    if (
-                        message.member.roles.cache.find((r) =>
-                            r.name.includes("Admin")
-                        )
-                    )
+                    if (message.member.roles.cache.find((r) => r.name.includes("Admin")))
                         return;
                     let nonNormal = 0;
                     let CAPS = 0;
@@ -208,10 +195,7 @@ module.exports = (bot: BotClient) => {
 
                     if (nonNormal > seventyProcent) {
                         punish(message, "usage of non ascii symbols");
-                    } else if (
-                        CAPS > seventyProcent &&
-                        message.content.length > 8
-                    ) {
+                    } else if (CAPS > seventyProcent && message.content.length > 8) {
                         punish(message, "CAPS lock");
                     }
                 }
@@ -222,8 +206,7 @@ module.exports = (bot: BotClient) => {
                 if (cmd == prefix + "void") {
                     let evil = args.join(" ");
                     evil = zalgo(evil);
-                    if (!evil)
-                        return console.error("No arguments on command 'void'");
+                    if (!evil) return console.error("No arguments on command 'void'");
                     message.delete();
                     message.channel.send(evil);
                 }
@@ -256,11 +239,6 @@ module.exports = (bot: BotClient) => {
             }
 
             if (args.includes("nudes")) message.channel.send(":eyes:");
-
-            if (message.channel.id == "462294972872392704") {
-                message.react("👍");
-                message.react("👎");
-            }
             return;
             // let member = mongoose.model("member", memberSchema);
             // let server = mongoose.model("server", serverSchema);
