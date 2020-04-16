@@ -15,8 +15,7 @@ export interface MemberInterface extends mongoose.Document {
 }
 
 export function getMemberDB(bot: BotClient) {
-    let Member = bot.mongo.model("member", memberSchema);
-    return Member;
+    return bot.mongo.model("member", memberSchema);
 }
 
 export function createMember(bot: BotClient, message: Message) {
@@ -35,17 +34,6 @@ export function createMember(bot: BotClient, message: Message) {
         if (e) throw e;
     });
     return member;
-    // return <MemberInterface>{
-    //     userID: message.author.id,
-    //     guildID: message.guild.id,
-    //     coins: 0,
-    //     level: 0,
-    //     xp: 0,
-    //     marry: null,
-    //     notifyCoinDrop: true,
-    //     seenCoinDropHint: false,
-    //     warns: 0
-    // }
 }
 
 export const memberSchema = new mongoose.Schema({

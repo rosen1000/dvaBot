@@ -2,13 +2,11 @@ import { Message, GuildMember, User, EmojiResolvable } from "discord.js";
 
 export { getMember, formatDate, promptMessage };
 
-function getMember(message: Message, id: string[]): GuildMember {
-    if (id) {
-        return message.guild.members.cache.get(id[0]);
-    }
-    if (message.mentions.members) {
-        return message.mentions.members.first();
-    }
+function getMember(message: Message, args: string[]): GuildMember {
+    return (
+        message.guild.member(message.mentions.users.first()) ||
+        message.guild.member(args[0])
+    );
 }
 
 function formatDate(date: Date): string {
@@ -29,8 +27,7 @@ async function promptMessage(
     for (let re of validReactions) await message.react(re);
 
     const filter = (re, u) =>
-        validReactions.includes(re.emoji.name) &&
-        author.id === message.author.id;
+        validReactions.includes(re.emoji.name) && author.id === message.author.id;
     return message
         .awaitReactions(filter, { max: 1, time: time })
         .then((coll) => coll.first() && coll.first().emoji.name);

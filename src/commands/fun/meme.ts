@@ -18,7 +18,7 @@ module.exports = class Meme extends Command {
         const random = reddits[Math.floor(Math.random() * reddits.length)];
         const meme = await randomPuppy(random);
         const embed = new MessageEmbed()
-            .setColor(require("../../config.js").color)
+            .setColor(this.bot.config.color)
             .setImage(meme)
             .setTitle(`r/${random}`)
             .setURL(`https://reddit.com/r/${random}`);

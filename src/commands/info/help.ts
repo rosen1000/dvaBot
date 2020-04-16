@@ -51,8 +51,7 @@ function getCommand(bot: BotClient, input) {
     let info;
 
     if (cmd.name) info = `**Command:** \`${cmd.name}\``;
-    //TODO: dont show aliases when they dont exist
-    if (cmd.aliases != [])
+    if (cmd.aliases.length != 0)
         info += `\n**Aliases:** ${cmd.aliases.map((a) => `\`${a}\``).join(", ")}`;
     if (cmd.description) info += `\n**Description:** ${cmd.description}`;
     if (cmd.usage) {

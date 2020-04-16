@@ -18,7 +18,7 @@ module.exports = class Animeme extends Command {
             headers: { limit: 200 },
         });
         const animeme = data.data.children;
-        let meme = animeme[Math.round(Math.random() * animeme.length)].data;
+        let meme = animeme[Math.round(Math.random() * animeme.length)].data; // TODO: sometimes cannot read data from undefined
         const embed = new Discord.MessageEmbed()
             .setColor(this.bot.config.color)
             .setTitle("Animeme!")
