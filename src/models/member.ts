@@ -18,10 +18,10 @@ export function getMemberDB(bot: BotClient) {
     return bot.mongo.model("member", memberSchema);
 }
 
-export function createMember(bot: BotClient, message: Message) {
+export function createMember(bot: BotClient, userID: string, guildID: string) {
     let member = new bot.db.member({
-        userID: message.author.id,
-        guildID: message.guild.id,
+        userID,
+        guildID,
         coins: 0,
         level: 0,
         xp: 0,
@@ -37,8 +37,14 @@ export function createMember(bot: BotClient, message: Message) {
 }
 
 export const memberSchema = new mongoose.Schema({
-    userID: String,
-    guildID: String,
+    userID: {
+        type: String,
+        unique: true
+    },
+    guildID: {
+        type: String,
+        unique: true
+    },
     coins: Number,
     level: Number,
     xp: Number,
@@ -55,4 +61,6 @@ export const memberSchema = new mongoose.Schema({
         default: 0,
         type: Number,
     },
+}, {
+    strict: true
 });

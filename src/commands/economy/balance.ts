@@ -14,7 +14,7 @@ module.exports = class Balance extends Command {
             enabled: true,
         });
     }
-    run(message: Message, args: string[]) {
+    async run(message: Message, args: string[]) {
         let member = getMember(message, args);
         let emoji = this.bot.emojis.cache.find((e) => e.name == "doritos");
         if (!member) member = message.member;
@@ -26,14 +26,15 @@ module.exports = class Balance extends Command {
             },
             async (e, coins: MemberInterface) => {
                 if (e) throw e;
+                console.log(coins)
                 if (!coins) {
-                    coins = <MemberInterface>createMember(this.bot, message);
+                    coins = <MemberInterface>createMember(this.bot, member.id, message.guild.id);
                 }
                 let embed = new MessageEmbed()
                     .setColor(this.bot.config.color)
                     .setDescription(`${message.member} has ${coins.coins} doritos ${emoji}`);
                 message.channel.send(embed);
             }
-        );
+        ).exec()
     }
 };

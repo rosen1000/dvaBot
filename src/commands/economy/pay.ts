@@ -30,7 +30,7 @@ module.exports = class Pay extends Command {
             },
             async (e, payer: MemberInterface) => {
                 if (e) console.log(e);
-                if (!payer) payer = <MemberInterface>createMember(this.bot, message);
+                if (!payer) payer = <MemberInterface>createMember(this.bot, message.author.id, message.guild.id);
 
                 if (payer.coins < given)
                     return message.channel.send("Not enoght minerals");
@@ -42,7 +42,7 @@ module.exports = class Pay extends Command {
                     async (e, reciever: MemberInterface) => {
                         if (e) throw e;
                         if (!reciever)
-                            reciever = <MemberInterface>createMember(this.bot, message);
+                            reciever = <MemberInterface>createMember(this.bot, member.id, message.guild.id);
                         payer.coins - given;
                         reciever.coins + given;
                         payer.save();
