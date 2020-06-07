@@ -2,23 +2,27 @@ const Discord = require("discord.js");
 const botconfig = require("../botconfig");
 const fs = require("fs");
 
+/**
+ * @param {Discord.Client} bot
+ * @param {Discord.Message} message
+ * @param {string[]} args
+ */
 module.exports.run = async (bot, message, args) => {
-   message.channel.send(
-      "ATTENTION! The command is broken, I will need additional work on fixing this one!"
-   );
    if (args[0]) {
-      //     message.channel.send(`Command list:\nUse \`?help [command name]\` for more info\n\`\`\``
-      // + `${bot.commands.map(c => `\n${c.help.name}`)}` + "\`\`\`");
-      // }else{
+      let embed = new Discord.MessageEmbed();
       let command = args[0];
       if (bot.commands.has(command)) {
          command = bot.commands.get(command);
-         message.channel.send(
-            `${command.help.name}'s help: \nDescription: ${command.help.desc} \nUsage: ${command.help.use}`
-         );
+         embed.setTitle(`${command.help.name}'s help`);
+         embed.addField("Description:", command.help.desc);
+         embed.addField("Usage:", command.help.use);
+         embed.addField("Category:", command.help.type);
+         embed.setColor(botconfig.color);
       } else {
-         message.channel.send("nothing found");
+         embed.setTitle("Nothing found :(");
+         embed.setColor("RED");
       }
+      message.channel.send(embed);
    } else {
       let admin = find(bot, "admin");
       let anilist = find(bot, "anilist");
@@ -67,6 +71,7 @@ module.exports.run = async (bot, message, args) => {
       const collector = msg.createReactionCollector(filter);
       msg.edit(embed).then(reset(collector, msg));
       collector.on("collect", async (reactions, coll) => {
+         if (coll.id != message.author.id) return;
          if (reactions.emoji.name == emojis[0]) {
             index = 0;
          } else if (reactions.emoji.name == emojis[1]) {
@@ -75,7 +80,7 @@ module.exports.run = async (bot, message, args) => {
             if (index < emojis.length - 1) index++;
          } else if (reactions.emoji.name == emojis[3]) {
             index = 12;
-         } else {
+         } else if (reactions.emoji.name == emojis[4]) {
             let awaitMessage = await message.channel.send(
                "Select page from 0 to 12"
             );
@@ -232,7 +237,7 @@ module.exports.run = async (bot, message, args) => {
                );
          }
          embed.setColor(botconfig.color);
-         reactions.remove(message.author);
+         reactions.users.remove(message.author);
          msg.edit(embed).then(m => reset(coll, m));
       });
    }
@@ -246,7 +251,7 @@ let reset = function(collector, msg) {
          .setTitle(msg.embeds[0].title)
          .addField(msg.embeds[0].fields[0].name, msg.embeds[0].fields[0].value)
          .setColor("black");
-      msg.clearReactions();
+      msg.reactions.removeAll();
       msg.edit(embed);
       collector.stop();
    }, 60000);

@@ -1,3 +1,2 @@
 in:
-   help.js # reactions deleteing after reaction
    mute.js # have to create roles, check RoleManager#create
