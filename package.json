@@ -4,28 +4,24 @@
   "description": "Bot",
   "main": "index.js",
   "dependencies": {
-    "@keyv/mongo": "^1.1.0",
     "axios": "^0.19.2",
-    "discord.js": "^12.1.1",
+    "discord.js": "^12.3.1",
     "dotenv": "^8.2.0",
-    "fortnite": "^4.3.2",
-    "keyv": "^4.0.0",
-    "mongoose": "^5.9.7",
+    "logdna": "^3.5.1",
     "ms": "^2.1.2",
     "node-gif": "^1.0.5",
     "node-gyp": "^6.1.0",
     "node-png": "^0.4.3",
     "rebuild": "^0.1.2",
     "request": "^2.88.2",
-    "request-promise": "^4.2.5",
-    "self-reload-json": "^0.4.0",
+    "request-promise": "^4.2.6",
     "to-zalgo": "^1.0.1",
-    "warframe-items": "^1.870.0",
-    "warframe-worldstate-parser": "^2.11.1"
+    "warframe-items": "^1.1067.0",
+    "warframe-worldstate-parser": "^2.14.2"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "?ping"
+    "start": "node index.js"
   },
   "author": "rosen1000",
   "license": "ISC"
