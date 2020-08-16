@@ -4,7 +4,7 @@ const bot = new Discord.Client({ disableEveryone: true });
 const Logger = require("logdna");
 require("dotenv").config();
 bot.commands = new Discord.Collection();
-bot.logger = Logger.createLogger(process.env.logdna, {app: "dva-bot"});
+// bot.logger = Logger.createLogger(process.env.logdna, {app: "dva-bot"});
 
 // Loading commands
 fs.readdir("./commands/", (err, files) => {
