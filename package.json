@@ -4,20 +4,11 @@
   "description": "Bot",
   "main": "index.js",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.20.0",
     "discord.js": "^12.3.1",
     "dotenv": "^8.2.0",
-    "logdna": "^3.5.1",
     "ms": "^2.1.2",
-    "node-gif": "^1.0.5",
-    "node-gyp": "^6.1.0",
-    "node-png": "^0.4.3",
-    "rebuild": "^0.1.2",
-    "request": "^2.88.2",
-    "request-promise": "^4.2.6",
-    "to-zalgo": "^1.0.1",
-    "warframe-items": "^1.1067.0",
-    "warframe-worldstate-parser": "^2.14.2"
+    "warframe-items": "^1.1067.0"
   },
   "devDependencies": {},
   "scripts": {
