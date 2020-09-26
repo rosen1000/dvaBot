@@ -1,8 +1,8 @@
 const Discord = require("discord.js");
-const botconfig = require("../botconfig.json");
+const botconfig = require("../../botconfig.json");
 
 module.exports.run = async (bot, message, args) => {
-   if (message.author.id != 353464955217117185) return message.channel.send("Restricted to bot owner only!");
+   if (message.author.id != "353464955217117185") return message.channel.send("Restricted to bot owner only!");
    let embed = new Discord.MessageEmbed()
       .setColor(botconfig.color)
       .setTitle("All severs im in:")
@@ -13,6 +13,7 @@ module.exports.run = async (bot, message, args) => {
 
 module.exports.help = {
    name: "servers",
-   desc: "Shows all servers the bot is in",
-   use: "?servers"
+   type: "info",
+   desc: "private command",
+   use: ""
 };

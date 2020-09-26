@@ -10,7 +10,7 @@ module.exports = {
     run: async (bot, message, args) => {
         const embed = new Discord.MessageEmbed()
         .setTitle("About")
-        .setColor(require("../botconfig.json").color || "GREEN")
+        .setColor(require("../../botconfig.json").color || "GREEN")
         .setDescription("Hello i am the D.VA bot!")
         .addField("What is my purpose?", "I'm here to enhance your discord experience, WITHOUT invading the chat")
         .addField("What do I mean \"invading\"", "By invading i mean, that i will not use the chat unless someone uses a command, meaning no xp and no coin system")
@@ -24,6 +24,7 @@ module.exports = {
 
 module.exports.help = {
     name: "about",
-    descr: "Shows info about the bot",
+    type: "info",
+    desc: "Shows info about the bot",
     use: "about",
 }

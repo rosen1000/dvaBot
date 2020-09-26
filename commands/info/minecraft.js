@@ -12,18 +12,24 @@ module.exports.run = async (bot, message, args) => {
         if (!server.online) {
             return message.channel.send("Server is offline!");
         }
-        console.log(server)
+        console.log(server);
         const embed = new Discord.MessageEmbed()
             .setTitle(server.hostname ? server.hostname : server.ip)
             .setColor("GREEN");
-        if (server.icon)
-            embed.setThumbnail(`https://api.mcsrvstat.us/icon/${server.ip}`);
+        if (server.icon) embed.setThumbnail(`https://api.mcsrvstat.us/icon/${server.ip}`);
         if (server.players)
-            embed.addField("Players", `${server.players.online}/${server.players.max}`, true);
+            embed.addField(
+                "Players",
+                `${server.players.online}/${server.players.max}`,
+                true
+            );
         if (server.motd)
-            embed.addField("MOTD", server.motd.clean.map(l => l), true);
-        if (server.version)
-            embed.addField("Version", server.version, true);
+            embed.addField(
+                "MOTD",
+                server.motd.clean.map((l) => l),
+                true
+            );
+        if (server.version) embed.addField("Version", server.version, true);
         if (server.software) {
             embed.addField("Software", server.software, true);
             if (server.plugins) {
@@ -41,5 +47,5 @@ module.exports.help = {
     name: "minecraft",
     type: "info",
     desc: "Shows info about minecraft servers",
-    use: "?minecraft [ip/hostname]",
+    use: "minecraft <ip/hostname>",
 };

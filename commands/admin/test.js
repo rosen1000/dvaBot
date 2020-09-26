@@ -11,6 +11,7 @@ module.exports.run = async (bot, message, args) => {
 
 module.exports.help = {
     name: "test",
-    desc: "testing command do not use ~~cant use~~",
-    use: "none",
+    type: "admin",
+    desc: "private command",
+    use: "",
 };
