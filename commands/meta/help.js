@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const botconfig = require("../botconfig");
+const botconfig = require("../../botconfig");
 const fs = require("fs");
 
 /**

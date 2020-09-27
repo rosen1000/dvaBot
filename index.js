@@ -11,6 +11,7 @@ require("./events/ready")(bot);
 require("./events/message")(bot);
 require("./events/guildMemberAdd")(bot);
 require("./events/guildMemberRemove")(bot);
+require("./events/voiceStateUpdate")(bot);
 
 // Login
 bot.login(process.env.TOKEN);
