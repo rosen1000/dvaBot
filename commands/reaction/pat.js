@@ -1,24 +1,29 @@
 const Discord = require("discord.js");
-const pats = require("../../assets/pat.json");
 const botconfig = require("../../botconfig.json");
+const axios = require("axios").default;
 
 module.exports.run = async (bot, message, args) => {
-    let patted =
-        message.guild.member(message.mentions.users.first()) ||
-        message.guild.member(args[0]);
-    let embed;
-    if (!patted) {
-        embed = new Discord.MessageEmbed()
-            .setTitle(`${bot.user.username} patted ${message.author.username}`)
-            .setColor(botconfig.color)
-            .setImage(pats[Math.floor(Math.random() * pats.length)]);
-    } else {
-        embed = new Discord.MessageEmbed()
-            .setTitle(`${message.author.username} patted ${patted.nickname}`)
-            .setColor(botconfig.color)
-            .setImage(pats[Math.floor(Math.random() * pats.length)]);
-    }
-    message.channel.send(embed);
+    axios
+        .get("https://nekos.life/api/v2/img/pat")
+        .then((response) => {
+            const patted =
+                    message.guild.member(message.mentions.users.first()) ||
+                    message.guild.member(args.join(" ")),
+                embed = new Discord.MessageEmbed()
+                    .setColor(botconfig.color)
+                    .setImage(response.data.data.url);
+
+            if (!patted) {
+                embed.setTitle(`${bot.user.username} patted ${message.author.username}`);
+            } else {
+                embed.setTitle(`${message.author.username} patted ${patted.nickname}`);
+            }
+
+            message.channel.send(embed);
+        })
+        .catch((e) => {
+            if (e) console.log(e);
+        });
 };
 
 module.exports.help = {
