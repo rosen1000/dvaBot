@@ -2,73 +2,77 @@ const Discord = require("discord.js");
 const botconfig = require("../../botconfig.json");
 const WF = require("warframe-items");
 const items = new WF();
-let embed;
+let embed = new Discord.MessageEmbed();
+const _ = require("lodash");
 
 module.exports.run = async (bot, message, args) => {
-    return message.channel.send("Disabled!");
-    // console.log(items.find(r => r.name == args.join(" ")));
-    let item = items.find((r) => r.name == args.join(" "));
+    // return message.channel.send("Disabled!");
+    let item = items.find((r) => r.name.toLowerCase() == args.join(" ").toLowerCase());
     if (!item) return message.channel.send("Not found");
+    build(item, message);
 
     switch (item.category) {
         case "Mods":
-            embed = new Discord.RichEmbed()
-                .setColor(botconfig.color)
-                .setThumbnail(`https://cdn.warframestat.us/img/${item.imageName}`)
-                .setTitle(item.name)
-                .setDescription(item.description)
-                .addField(
-                    "Info:",
-                    `Mod for \`${item.type}\` with polarity \`${item.polarity}\` Rarity: ${item.rarity}` +
-                        `\n Base drain: ${item.baseDrain} and fusion limit: ${
-                            item.fusionLimit
-                        } (Maxed: ${item.baseDrain + item.fusionLimit})`
-                );
-            for (var i = 0; i < item.drops.length; i++) {
+            embed.addField(
+                "Info:",
+                `\`${item.type}\` with \`${item.polarity}\` polarity
+                Rarity: ${item.rarity},
+                Base drain: ${item.baseDrain} (Max drain: ${item.baseDrain + item.fusionLimit})`
+            );
+            let drops = item.drops.sort((a, b) => b.chance - a.chance);
+            for (var i = 0; i < (drops.length > 6 ? 6 : drops.length); i++)
                 embed.addField(
-                    item.drops[i].location,
-                    `Type: ${item.drops[i].type}, Rarity: ${item.drops[i].rarity}, Chance: ${item.drops[i].chance}`
+                    drops[i].location,
+                    `Rarity: ${drops[i].rarity},\nChance: ${drops[i].chance * 100}%`,
+                    true
                 );
-                if (i == 20) break;
-            }
+            embed.setDescription(item.levelStats[item.levelStats.length - 1].stats);
             break;
         case "Primary":
-            embed = new Discord.RichEmbed()
-                .setColor(botconfig.color)
-                .setThumbnail(item.wikiaThumbnail)
-                .setTitle(item.name)
-                .setDescription(item.description)
+            embed
                 .addField(
                     "Damage: " + item.damage,
-                    `Impact: ${item.damageTypes.impact}, Slash: ${item.damageTypes.slash}, Puncture: ${item.damageTypes.puncture}`,
+                    `Impact: ${item.damageTypes.impact},
+                    Slash: ${item.damageTypes.slash},
+                    Puncture: ${item.damageTypes.puncture}
+                    Crit chance: ${item.criticalChance * 100}%,
+                    Crit multplier: ${item.criticalMultiplier},
+                    Status: ${Math.ceil(item.procChance * 100)}%,`,
                     true
                 )
                 .addField(
-                    "Stats: ",
-                    `Magazine size: ${item.magazineSize}, Reload time: ${item.magazineSize}` +
-                        `\nCrit chance: ${item.criticalChance}, Crit multplier: ${item.criticalMultiplier}` +
-                        `\nTrigger: ${item.trigger}, Noice: ${item.noice},`,
+                    "Stats:",
+                    `Magazine size: ${item.magazineSize},
+                    Reload time: ${item.magazineSize},
+                    Trigger: ${item.trigger},
+                    Noice: ${item.noise}`,
                     true
+                )
+                .addField(
+                    "Other:",
+                    `Mastery rank: ${item.masteryReq},
+                    Noise: ${item.noise},
+                    Trigger: ${item.trigger}`
                 );
             break;
         case "Secondary":
-            embed = new Discord.RichEmbed()
-                .setColor(botconfig.color)
-                .setThumbnail(item.wikiaThumbnail)
-                .setTitle(item.name)
-                .setDescription(item.description)
+            embed
                 .addField(
                     `Damage: ${item.damage}`,
-                    `Impact: ${item.damageTypes.impact}, Slash: ${item.damageTypes.slash}, Puncture: ${item.damageTypes.puncture}`
+                    `Impact: ${item.damageTypes.impact},
+                    Slash: ${item.damageTypes.slash},
+                    Puncture: ${item.damageTypes.puncture}`
                 )
                 .addField(
                     "Stats: ",
-                    `Magazine size: ${item.magazineSize}, Reload time: ${item.magazineSize}` +
-                        `\nCrit chance: ${item.criticalChance}, Crit multplier: ${item.criticalMultiplier}` +
-                        `\nTrigger: ${item.trigger}, Noice: ${item.noice},`,
+                    `Magazine size: ${item.magazineSize},
+                    Reload time: ${item.magazineSize}
+                    Crit chance: ${item.criticalChance}, Crit multplier: ${item.criticalMultiplier}
+                    Trigger: ${item.trigger},
+                    Noice: ${item.noice},`,
                     true
                 )
-                .addField("More info: ", `Mastery rank: ${item.masteryReq}, `, true);
+                .addField("More info: ", `Mastery rank: ${item.masteryReq},`, true);
             break;
         case "Melee":
             embed = new Discord.RichEmbed()
@@ -78,36 +82,38 @@ module.exports.run = async (bot, message, args) => {
                 .setDescription(item.description)
                 .addField(
                     `Damage: ${item.damage}`,
-                    `Impact: ${item.damageTypes.impact}, Slash: ${item.damageTypes.slash}, Puncture: ${item.damageTypes.puncture}`,
-                    true
+                    `Impact: ${item.damageTypes.impact},
+                    Slash: ${item.damageTypes.slash},
+                    Puncture: ${item.damageTypes.puncture}`
                 )
                 .addField(
                     "item stats:",
-                    `Category: ${item.category}\nType: ${item.type}\nReload: ${item.reloadTime}\nTrigger: ${item.trigger}\nAccuracy: ${item.accuracy}\nCrit chance and multiplier: ${item.criticalChance}, ${item.criticalMultiplier}`,
-                    true
+                    `Category: ${item.category}
+                    Type: ${item.type}
+                    Reload: ${item.reloadTime}
+                    Trigger: ${item.trigger}
+                    Accuracy: ${item.accuracy}
+                    Crit chance and multiplier: ${item.criticalChance}, ${item.criticalMultiplier}`
                 );
             message.channel.send(embed);
             break;
         case "Warframes":
-            embed = new Discord.RichEmbed()
-                .setColor(botconfig.color)
-                .setThumbnail(item.wikiaThumbnail)
-                .setTitle(item.name)
-                .setDescription(item.description)
+            embed
                 .addField(
                     "Properties: ",
-                    `HP: ${item.health}, Shield: ${item.shield}, Armor: ${item.armor}, Power: ${item.power}\nPassive: ${item.passiveDescription}`,
-                    true
+                    `HP: ${item.health},
+                    Shield: ${item.shield},
+                    Armor: ${item.armor},
+                    Energy: ${item.power}
+                    Passive: ${item.passiveDescription}`
                 )
                 .addField(
                     "Abilities: ",
-                    item.abilities.map((r) => `\`${r.name}\`: ${r.description}\n`),
-                    true
+                    item.abilities.map((r) => `\`${r.name}\`: ${r.description}\n`).trim()
                 )
                 .addField(
                     "More info: ",
-                    `Sex ${item.sex}, Mastery rank: ${item.masteryReq}, Sprint: ${item.sprint}`,
-                    true
+                    `Sex ${item.sex}, Mastery rank: ${item.masteryReq}, Sprint: ${item.sprint}`
                 );
             break;
         default:
@@ -115,11 +121,21 @@ module.exports.run = async (bot, message, args) => {
             return;
     }
     message.channel.send(embed);
+    embed = undefined;
 };
 
 module.exports.help = {
     name: "wf",
     type: "info",
-    desc: "Warframe commands use ?wf help for help of all wf commands",
-    use: "wf <command> [args]",
+    desc: "Check on warframe items, mods, warframes and more!",
+    use: "wf <args>",
 };
+
+function build(item, message) {
+    embed
+        .setColor(botconfig.color)
+        .setThumbnail(`https://cdn.warframestat.us/img/${item.imageName}`)
+        .setTitle(item.name)
+        .setURL(item.wikiaUrl)
+        .setDescription(item.description);
+}
