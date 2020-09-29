@@ -24,6 +24,12 @@ module.exports.run = async (bot, message, args) => {
                     drops[i].location,
                     `Rarity: ${drops[i].rarity},\nChance: ${chance(drops[i].chance)}%`,
                     true
+                )
+                .addField(
+                    "Other:",
+                    `Mastery rank: ${item.masteryReq},
+                    Noise: ${item.noise},
+                    Trigger: ${item.trigger}`
                 );
             embed.setDescription(item.levelStats[item.levelStats.length - 1].stats);
             break;
