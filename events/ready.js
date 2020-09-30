@@ -6,9 +6,7 @@ const ms = require("ms");
  */
 module.exports = (bot) => {
     bot.once("ready", async () => {
-        console.log(
-            `${bot.user.username} is online in ${bot.guilds.cache.size} servers ^^`
-        );
+        console.log(`${bot.user.username} is online in ${bot.guilds.cache.size} servers ^^`);
 
         // Load statuses and set a default one
         const statuses = require("../statuses.json");

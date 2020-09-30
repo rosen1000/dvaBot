@@ -16,22 +16,18 @@ module.exports.run = async (bot, message, args) => {
                 "Info:",
                 `\`${item.type}\` with \`${item.polarity}\` polarity
                 Rarity: ${item.rarity}
-                Base drain: ${item.baseDrain} (Max drain: ${item.baseDrain + item.fusionLimit})`
+                Base ${item.baseDrain > 0 ? "drain" : "gain"}: ${Math.abs(item.baseDrain)}\ 
+                (Max drain: ${Math.abs(item.baseDrain) + item.fusionLimit})`
             );
-            let drops = item.drops.sort((a, b) => b.chance - a.chance);
-            for (var i = 0; i < (drops.length > 6 ? 6 : drops.length); i++)
-                embed.addField(
-                    drops[i].location,
-                    `Rarity: ${drops[i].rarity},\nChance: ${chance(drops[i].chance)}%`,
-                    true
-                )
-                .addField(
-                    "Other:",
-                    `Mastery rank: ${item.masteryReq},
-                    Noise: ${item.noise},
-                    Trigger: ${item.trigger}`
-                );
-            embed.setDescription(item.levelStats[item.levelStats.length - 1].stats);
+            if (item.drops) {
+                let drops = item.drops.sort((a, b) => b.chance - a.chance);
+                for (var i = 0; i < (drops.length > 6 ? 6 : drops.length); i++)
+                    embed.addField(
+                        drops[i].location,
+                        `Rarity: ${drops[i].rarity},\nChance: ${chance(drops[i].chance)}%`,
+                        true
+                    );
+            }
             break;
         case "Primary":
         case "Secondary":
@@ -86,7 +82,7 @@ module.exports.run = async (bot, message, args) => {
                     `HP: ${item.health} (${item.health * 3})
                     Shield: ${item.shield} (${item.shield * 3})
                     Armor: ${item.armor}
-                    Energy: ${item.power} (${item.power * .5})
+                    Energy: ${item.power} (${item.power * 0.5})
                     Passive: ${item.passiveDescription}`
                 )
                 .addField(
