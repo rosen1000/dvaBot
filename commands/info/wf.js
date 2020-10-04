@@ -16,7 +16,9 @@ module.exports.run = async (bot, message, args) => {
                 "Info:",
                 `\`${item.type}\` with \`${item.polarity}\` polarity
                 Rarity: ${item.rarity}
-                Base ${item.baseDrain > 0 ? "drain" : "gain"}: ${Math.abs(item.baseDrain)}\ 
+                Base ${item.baseDrain > 0 ? "drain" : "gain"}: ${Math.abs(
+                    item.baseDrain
+                )}\ 
                 (Max drain: ${Math.abs(item.baseDrain) + item.fusionLimit})`
             );
             if (item.drops) {
@@ -24,7 +26,9 @@ module.exports.run = async (bot, message, args) => {
                 for (var i = 0; i < (drops.length > 6 ? 6 : drops.length); i++)
                     embed.addField(
                         drops[i].location,
-                        `Rarity: ${drops[i].rarity},\nChance: ${chance(drops[i].chance)}%`,
+                        `Rarity: ${drops[i].rarity},\nChance: ${chance(
+                            drops[i].chance
+                        )}%`,
                         true
                     );
             }
@@ -32,19 +36,20 @@ module.exports.run = async (bot, message, args) => {
         case "Primary":
         case "Secondary":
             embed
-                .setDescription(item.description)
                 .addField(
                     `Damage: ${item.damage}`,
                     `${damageTypes(item.damageTypes)}
                     Crit chance: ${chance(item.criticalChance)}%
-                    Crit multplier: ${item.criticalMultiplier}x
+                    Crit multplier: ${chance(item.criticalMultiplier) / 100}x
                     Status: ${chance(item.procChance)}%`,
                     true
                 )
                 .addField(
                     "Other:",
-                    `Type: ${item.type}
-                    Magazine size: ${item.magazineSize}/${item.ammo}
+                    `Type: ${item.type == "undefined" ? item.category : item.type}
+                    Magazine size: ${item.magazineSize}/${
+                        item.ammo == undefined ? item.magazineSize : item.ammo
+                    }
                     Reload time: ${item.reloadTime}
                     Fire Rate: ${item.fireRate}
                     Mastery rank: ${item.masteryReq}
@@ -55,19 +60,19 @@ module.exports.run = async (bot, message, args) => {
                 );
             break;
         case "Melee":
+        case "Arch-Melee":
             embed
-                .setDescription(item.description)
                 .addField(
                     `Damage: ${item.damage}`,
                     `${damageTypes(item.damageTypes)}
                     Crit chance: ${chance(item.criticalChance)}%
-                    Crit multplier: ${item.criticalMultiplier}x
+                    Crit multplier: ${chance(item.criticalMultiplier) / 100}x
                     Status: ${chance(item.procChance)}%`,
                     true
                 )
                 .addField(
                     "Other:",
-                    `Type: ${item.type}
+                    `Type: ${item.type == "" ? item.category : item.type}
                     Attack speed: ${item.fireRate}
                     Range: ${item.range}
                     Mastery rank: ${item.masteryReq}
@@ -78,13 +83,13 @@ module.exports.run = async (bot, message, args) => {
         case "Warframes":
             embed
                 .addField(
-                    "Properties: ",
+                    "Properties:",
                     `HP: ${item.health} (${item.health * 3})
                     Shield: ${item.shield} (${item.shield * 3})
                     Armor: ${item.armor}
-                    Energy: ${item.power} (${item.power * 0.5})
-                    Passive: ${item.passiveDescription}`
+                    Energy: ${item.power} (${item.power * 1.5})`
                 )
+                .addField("Passive:", item.passiveDescription)
                 .addField(
                     "Abilities: ",
                     item.abilities.map((r) => `\`${r.name}\`: ${r.description}\n`)
@@ -96,8 +101,36 @@ module.exports.run = async (bot, message, args) => {
                     Sprint: ${item.sprint}`
                 );
             break;
+        case "Archwing":
+            embed
+                .addField(
+                    "Properties:",
+                    `HP: ${item.health} (${item.health * 3})
+                    Shield: ${item.shield} (${item.shield * 3})
+                    Armor: ${item.armor}
+                    Energy: ${item.power} (${item.power * 1.8})`
+                )
+                .addField(
+                    "Abilities:",
+                    item.abilities.map((r) => `\`${r.name}\`: ${r.description}\n`)
+                )
+                .addField(
+                    "More info:",
+                    `Flight speed: ${item.sprintSpeed}
+                    Mastery rank: ${item.masteryReq}`
+                );
+            break;
+        case "Sentinels":
+            embed.addField(
+                "Properties:",
+                `HP: ${item.health}
+                Shield: ${item.shield}
+                Armor: ${item.armor}`
+            );
+            break;
         default:
             message.channel.send("error");
+            embed = new Discord.MessageEmbed();
             return;
     }
     message.channel.send(embed);
