@@ -18,27 +18,14 @@ module.exports = (bot) => {
                         return;
                     }
 
+                    let loaded = 0;
                     jsfile.forEach((f, i) => {
                         let props = require(path.join(__dirname, "../commands", dir, f));
-                        console.log(`${f} loaded!`);
+                        loaded++;
                         bot.commands.set(props.help.name, props);
                     });
+                    console.log(`(${loaded}) ${dir} loaded`);
             });
         }
     });
-    // fs.readdir(path.join(__dirname, "..", "commands"), (err, files) => {
-    //     if (err) console.error(err);
-
-    //     let jsfile = files.filter(f => f.split(".").pop() === 'js')
-    //     if (jsfile.length <= 0) {
-    //         console.warn("Couln't find commands.");
-    //         return;
-    //     }
-
-    //     jsfile.forEach((f, i) => {
-    //         let props = require(path.join(__dirname, `../commands/${f}`));
-    //         console.log(`${f} loaded!`);
-    //         bot.commands.set(props.help.name, props);
-    //     });
-    // });
 };
