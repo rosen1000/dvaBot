@@ -1,12 +1,10 @@
 const Discord = require("discord.js");
 const botconfig = require("../../botconfig.json");
-const WF = require("warframe-items");
-const items = new WF();
+const axios = require("axios").default;
 let embed = new Discord.MessageEmbed();
 
 module.exports.run = async (bot, message, args) => {
-    // return message.channel.send("Disabled!");
-    let item = items.find((r) => r.name.toLowerCase() == args.join(" ").toLowerCase());
+    let item = (await axios.get(`https://api.warframestat.us/items/search/${args.join(" ").toLowerCase()}`)).data[0];
     if (!item) return message.channel.send("Not found");
     build(item, message);
 
@@ -35,6 +33,7 @@ module.exports.run = async (bot, message, args) => {
             break;
         case "Primary":
         case "Secondary":
+        case "Arch-Gun":
             embed
                 .addField(
                     `Damage: ${item.damage}`,
