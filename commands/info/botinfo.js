@@ -12,7 +12,7 @@ module.exports.run = async (bot, message, args) => {
 
 module.exports.help = {
     name: "botinfo",
-    desc: "info",
+    type: "info",
     desc: "Shows basic bot information",
     use: "botinfo",
 };

@@ -1,6 +1,10 @@
 const Discord = require("discord.js");
 const botconfig = require("../../botconfig");
-const fs = require("fs");
+
+// TODO: ok... its a little bit fucked up, when it sends the loading embed it immediately changing to the normal menu
+// TODO: the emojis were a little bit on the slower side maybe because dual connection
+// TODO: lets make the index work too dou
+// TODO: also collector.stop machine broke
 
 /**
  * @param {Discord.Client} bot
@@ -24,64 +28,71 @@ module.exports.run = async (bot, message, args) => {
         }
         message.channel.send(embed);
     } else {
-        let admin = find(bot, "admin");
-        let anilist = find(bot, "anilist");
-        let economy = find(bot, "economy");
-        let fun = find(bot, "fun");
-        let image = find(bot, "image");
-        let meta = find(bot, "meta");
-        let mod = find(bot, "mod");
-        let reaction = find(bot, "reaction");
-        let shop = find(bot, "shop");
-        let social = find(bot, "social");
-        let trading = find(bot, "trading");
-        let utility = find(bot, "utility");
+        const commandMap = new Map();
+        for (let c of bot.commands.map((c) => c)) {
+            if (commandMap.has(c.help.type))
+                commandMap.set(c.help.type, [...commandMap.get(c.help.type), c]);
+            else commandMap.set(c.help.type, [c]);
+        }
+
+        const descriptionMap = new Map();
+        descriptionMap.set("admin", "Server and bot managment commands");
+        descriptionMap.set("anilist", "Anime image searches");
+        descriptionMap.set("economy", "Economy related commands. For example coins or doritos");
+        descriptionMap.set("fun", "I'll try my best to entertain you ;)");
+        descriptionMap.set("image", "Let's see some spicy images");
+        descriptionMap.set("meta", "Commands closeley-related to the bot");
+        descriptionMap.set("mod", "Some moderation commands regarding the server itself");
+        descriptionMap.set("reaction", "Huggies");
+        descriptionMap.set("shop", "Shop some cool items");
+        descriptionMap.set("social", "For your special social needs");
+        descriptionMap.set("trading", "For trading items got from shop or other methods");
+        descriptionMap.set("utility", "Some self commands");
+
+        // let admin = find(bot, "admin");
+        // let anilist = find(bot, "anilist");
+        // let economy = find(bot, "economy");
+        // let fun = find(bot, "fun");
+        // let image = find(bot, "image");
+        // let meta = find(bot, "meta");
+        // let mod = find(bot, "mod");
+        // let reaction = find(bot, "reaction");
+        // let shop = find(bot, "shop");
+        // let social = find(bot, "social");
+        // let trading = find(bot, "trading");
+        // let utility = find(bot, "utility");
+
+        let i = 1;
+        let text = "";
+        for (const cmd of commandMap) {
+            text = text.concat(`${i++}: ${capiralize(cmd[0])} (${cmd[1].length})\n`);
+        }
 
         let embed = new Discord.MessageEmbed()
             .setTitle("📖 Help")
             .setColor(botconfig.color)
-            .addField(
-                "Categories:",
-                `1: Admin Commands (${admin.length})
-                2: Anilist Commands (${anilist.length})
-                3: Economy Commands (${economy.length})
-                4: Fun Commands (${fun.length})
-                5: Image Commands (${image.length})
-                6: Meta Commands (${meta.length})
-                7: Mod Commands (${mod.length})
-                8: Reaction Commands (${reaction.length})
-                9: Shop Commands (${shop.length})
-                10: Social Commands (${social.length})
-                11: Trading Commands (${trading.length})
-                12: Utility Commands (${utility.length})`
-            );
+            .addField("Categories:", text.trim());
         let loadingEmbed = new Discord.MessageEmbed()
             .setTitle("Loading help embed, please wait...")
             .setColor("ffff00");
         let msg = await message.channel.send(loadingEmbed);
-        await msg.react("⏮");
-        await msg.react("◀");
-        await msg.react("▶");
-        await msg.react("⏭");
-        await msg.react("🔢");
         let index = 0;
         const emojis = ["⏮", "◀", "▶", "⏭", "🔢"];
-        const filter = (r, u) =>
-            emojis.includes(r.emoji.name) && u.id == message.author.id;
+        emojis.forEach((e) => msg.react(e));
+        const filter = (r, u) => emojis.includes(r.emoji.name) && u.id == message.author.id;
         const collector = msg.createReactionCollector(filter);
         msg.edit(embed).then(reset(collector, msg));
+
         collector.on("collect", async (reactions, coll) => {
             if (coll.id != message.author.id) return;
-            if (reactions.emoji.name == emojis[0]) {
-                index = 0;
-            } else if (reactions.emoji.name == emojis[1]) {
-                if (index > 0) index--;
-            } else if (reactions.emoji.name == emojis[2]) {
-                if (index < emojis.length - 1) index++;
-            } else if (reactions.emoji.name == emojis[3]) {
-                index = 12;
-            } else if (reactions.emoji.name == emojis[4]) {
-                let awaitMessage = await message.channel.send("Select page from 0 to 12");
+            if (reactions.emoji.name == emojis[0]) index = 0;
+            else if (reactions.emoji.name == emojis[1] && index > 0) index--;
+            else if (reactions.emoji.name == emojis[2] && index < emojis.length - 1) index++;
+            else if (reactions.emoji.name == emojis[3]) index = commandMap.size;
+            else if (reactions.emoji.name == emojis[4]) {
+                let awaitMessage = await message.channel.send(
+                    `Select page from 0 to ${commandMap.size}`
+                );
                 const filter = (m) => m.author.id == message.author.id;
                 await message.channel
                     .awaitMessages(filter, {
@@ -92,28 +103,28 @@ module.exports.run = async (bot, message, args) => {
                     .then((collected) => {
                         let number = parseInt(collected.first().content);
                         if (number == NaN)
+                            return message.channel.send("That's not a number").then((msg) => {
+                                msg.delete(3000);
+                                collected.first().delete(3000);
+                                awaitMessage.delete(3000);
+                            });
+                        else if (number > commandMap.size)
                             return message.channel
-                                .send("That's not a number")
+                                .send(`Page can't be more than the maximum (${commandMap.size})`)
                                 .then((msg) => {
+                                    msg.delete(3000);
                                     collected.first().delete(3000);
                                     awaitMessage.delete(3000);
                                 });
-                        if (number > 12)
+                        else if (number < 0)
                             return message.channel
-                                .send("Page can't be more than the maximum (12)")
+                                .send("Page can't be less than 0 (0 for main page)")
                                 .then((msg) => {
+                                    msg.delete(3000);
                                     collected.first().delete(3000);
                                     awaitMessage.delete(3000);
                                 });
-                        if (number < 0)
-                            return message.channel
-                                .send(
-                                    "Page can't be less than the minimum (0 for main page)"
-                                )
-                                .then((msg) => {
-                                    collected.first().delete(3000);
-                                    awaitMessage.delete(3000);
-                                });
+
                         index = number;
                         message.channel.send("Done!").then((m) => {
                             m.delete(3000);
@@ -121,7 +132,7 @@ module.exports.run = async (bot, message, args) => {
                             awaitMessage.delete(3000);
                         });
                     })
-                    .catch((collected) => {
+                    .catch(() => {
                         message.channel.send("Time ran out!").then((m) => {
                             m.delete(3000);
                             awaitMessage.delete();
@@ -129,113 +140,17 @@ module.exports.run = async (bot, message, args) => {
                     });
             }
             delete embed;
-            switch (index) {
-                case 0:
-                    embed = new Discord.MessageEmbed().setTitle("📖 Help").addField(
-                        "Categories:",
-                        `1: Admin Commands (${admin.length})
-                            2: Anilist Commands (${anilist.length})
-                            3: Economy Commands (${economy.length})
-                            4: Fun Commands (${fun.length})
-                            5: Image Commands (${image.length})
-                            6: Meta Commands (${meta.length})
-                            7: Mod Commands (${mod.length})
-                            8: Reaction Commands (${reaction.length})
-                            9: Shop Commands (${shop.length})
-                            10: Social Commands (${social.length})
-                            11: Trading Commands (${trading.length})
-                            12: Utility Commands (${utility.length})`
-                    );
-                    break;
-                case 1:
-                    embed = new Discord.MessageEmbed()
-                        .setTitle("📖 Help >> Admin")
-                        .setDescription("Server managment commands")
-                        .addField("Commands", map(bot, admin));
-                    break;
-                case 2:
-                    embed = new Discord.MessageEmbed()
-                        .setTitle("📖 Help >> Anilist")
-                        .setDescription("Anime image searches")
-                        .addField("Commands", map(bot, anilist));
-                    break;
-                case 3:
-                    embed = new Discord.MessageEmbed()
-                        .setTitle("📖 Help >> Economy")
-                        .setDescription(
-                            "Economy related commands. For example coins or doritos"
-                        )
-                        .addField("Commands:", map(bot, economy));
-                    break;
-                case 4:
-                    embed = new Discord.MessageEmbed()
-                        .setTitle("📖 Help >> Fun")
-                        .setDescription("I'll try my best to entertain you :)")
-                        .addField("Commands:", map(bot, fun));
-                    break;
-                case 5:
-                    embed = new Discord.MessageEmbed()
-                        .setTitle("📖 Help >> Image")
-                        .setDescription(
-                            "I can search images too, not only you have acsess to google.. b-baka >~<"
-                        )
-                        .addField("Commands:", map(bot, image));
-                    break;
-                case 6:
-                    embed = new Discord.MessageEmbed()
-                        .setTitle("📖 Help >> Meta")
-                        .setDescription("Commands closeley-related to the bot")
-                        .addField("Commands:", map(bot, meta));
-                    break;
-                case 7:
-                    embed = new Discord.MessageEmbed()
-                        .setTitle("📖 Help >> Mod")
-                        .setDescription(
-                            "Some moderation commands regarding the server itself"
-                        )
-                        .addField("Commands:", map(bot, mod));
-                    break;
-                case 8:
-                    embed = new Discord.MessageEmbed()
-                        .setTitle("📖 Help >> Reaction")
-                        .setDescription(
-                            "Image-anime-reaction commands like one good swap to give someone some logic"
-                        )
-                        .addField("Commands:", map(bot, reaction));
-                    break;
-                case 9:
-                    embed = new Discord.MessageEmbed()
-                        .setTitle("📖 Help >> Shop")
-                        .setDescription("Shop some cool items")
-                        .addField("Commands:", map(bot, shop));
-                    break;
-                case 10:
-                    embed = new Discord.MessageEmbed()
-                        .setTitle("📖 Help >> Social")
-                        .setDescription("For your special social needs")
-                        .addField("Commands:", map(bot, social));
-                    break;
-                case 11:
-                    embed = new Discord.MessageEmbed()
-                        .setTitle("📖 Help >> Trading")
-                        .setDescription(
-                            "For trading items got from shop or other methods"
-                        )
-                        .addField("Commands:", map(bot, trading));
-                    break;
-                case 12:
-                    embed = new Discord.MessageEmbed()
-                        .setTitle("📖 Help >> Utility")
-                        .setDescription("Some self commands")
-                        .addField("Commands:", map(bot, utility));
-                    break;
-                default:
-                    return message.channel.send(
-                        "Error while getting page, please contact dev via DM (Hax0r404#2104) or using ?bugreport command"
-                    );
+            if (index == 0) {
+                embed = new Discord.MessageEmbed()
+                    .setTitle("📖 Help")
+                    .addField("Categories:", text.trim());
+            } else if (index <= commandMap.size) {
+                embed = new Discord.MessageEmbed().setTitle();
+            } else {
+                return message.channel.send("Error while getting page!");
             }
             embed.setColor(botconfig.color);
-            reactions.users.remove(message.author);
+            // reactions.users.remove(message.author);
             msg.edit(embed).then((m) => reset(coll, m));
         });
     }
@@ -266,9 +181,11 @@ let find = function (bot, args) {
 };
 let map = function (bot, variable) {
     if (variable.length == 0) return "No commands found!";
-    let emoji = "🔲";
-    let output = variable.map((cmd) => `${emoji} ${cmd.name}: ${cmd.desc}`);
-    return output;
+    return variable.map((cmd) => `🔲 ${cmd.name}: ${cmd.desc}`);
+};
+let capiralize = function (text) {
+    if (text.length <= 0) return text;
+    return text.charAt(0).toUpperCase() + text.substr(1);
 };
 
 module.exports.help = {
