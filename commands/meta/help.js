@@ -4,9 +4,6 @@ const emojis = ["⏮", "◀", "▶", "⏭", "🔢"];
 const commandMap = new Map();
 const descriptionMap = new Map();
 
-// TODO: the emojis were a little bit on the slower side maybe because dual connection
-// TODO: lets make the index work too dou
-
 /**
  * @param {Discord.Client} bot
  * @param {Discord.Message} message
@@ -84,13 +81,13 @@ module.exports.run = async (bot, message, args) => {
         const filter = (r, u) => emojis.includes(r.emoji.name) && u.id == message.author.id;
         const collector = msg.createReactionCollector(filter);
         msg.edit(embed).then(reset(collector, msg));
+        let index = 0;
 
         let collectorHandler = async function (reactions, coll) {
-            let index = 0;
             if (coll.id != message.author.id) return;
             if (reactions.emoji.name == emojis[0]) index = 0;
             else if (reactions.emoji.name == emojis[1] && index > 0) index--;
-            else if (reactions.emoji.name == emojis[2] && index < emojis.length - 1) index++;
+            else if (reactions.emoji.name == emojis[2] && index < commandMap.size) index++;
             else if (reactions.emoji.name == emojis[3]) index = commandMap.size;
             else if (reactions.emoji.name == emojis[4]) {
                 let awaitMessage = await message.channel.send(
@@ -140,11 +137,11 @@ module.exports.run = async (bot, message, args) => {
                 let commandArr = [];
                 commandMap.forEach((c) => commandArr.push(c));
                 embed = new Discord.MessageEmbed()
-                    .setTitle("📖 Help >> " + capitalize(commandArr[index][0].help.type))
-                    .setDescription(descriptionMap.get(commandArr[index][0].help.type))
+                    .setTitle("📖 Help >> " + capitalize(commandArr[index - 1][0].help.type))
+                    .setDescription(descriptionMap.get(commandArr[index - 1][0].help.type))
                     .addField(
                         "Commands:",
-                        commandArr[index].map((cmd) => `${cmd.help.name}: ${cmd.help.desc}`)
+                        commandArr[index - 1].map((cmd) => `${cmd.help.name}: ${cmd.help.desc}`)
                     );
             } else {
                 return message.channel.send("Error while getting page!");
