@@ -5,7 +5,7 @@ module.exports.run = async (bot, message, args) => {
     let invEmbed = new Discord.MessageEmbed()
         .setColor(botconfig.color)
         .setTitle("Invite:")
-        .setDescription(`[invite me](${bot.generateInvite(8)}) ❤`);
+        .setDescription(`[invite me](${await bot.generateInvite(8)}) ❤`);
 
     message.channel.send(invEmbed);
 };
