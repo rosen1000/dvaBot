@@ -33,6 +33,7 @@ module.exports = (bot) => {
             if (!member.user.bot) {
                 // Give member
                 await member.roles.add("563762491927298048");
+                member.guild.channels.cache.get("572063723955552258").send(`Friendly reminder, ${member.user.username} is new to discord!`);
             } else {
                 // Give bot
                 await member.roles.add("564510092851019792");
