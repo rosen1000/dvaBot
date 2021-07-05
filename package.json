@@ -3,15 +3,17 @@
   "version": "1.0.0",
   "description": "Bot",
   "main": "index.js",
+  "module": "commonjs",
   "dependencies": {
     "axios": "^0.21.1",
-    "discord.js": "^12.5.1",
-    "dotenv": "^8.2.0",
+    "discord.js": "^12.5.3",
+    "dotenv": "^10.0.0",
     "ms": "^2.1.3"
   },
   "devDependencies": {},
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "node index.js --dev"
   },
   "author": "rosen1000",
   "license": "ISC"

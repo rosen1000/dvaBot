@@ -14,4 +14,4 @@ require("./events/guildMemberRemove")(bot);
 require("./events/voiceStateUpdate")(bot);
 
 // Login
-bot.login(process.env.TOKEN);
+bot.login(process.argv.includes('--dev') ? process.env.DEV : process.env.TOKEN);
