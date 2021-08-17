@@ -9,11 +9,11 @@ module.exports = (bot) => {
         if (message.author.bot) return;
         if (message.channel.type === "dm") return;
 
-        let prefix = botconfig.prefix;
+        let prefix = process.argv.includes('--dev') ? '/' : botconfig.prefix;
         let messageArray = message.content.split(" ");
         let cmd = messageArray[0].toLocaleLowerCase();
         let args = messageArray.slice(1);
-        if (message.content.startsWith("?")) {
+        if (message.content.startsWith(prefix)) {
             let commandfile = bot.commands.get(cmd.slice(prefix.length));
             if (commandfile) commandfile.run(bot, message, args);
         }

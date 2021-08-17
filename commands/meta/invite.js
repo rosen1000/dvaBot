@@ -4,8 +4,8 @@ const botconfig = require("../../botconfig.json");
 module.exports.run = async (bot, message, args) => {
     let invEmbed = new Discord.MessageEmbed()
         .setColor(botconfig.color)
-        .setTitle("Invite:")
-        .setDescription(`[invite me](${await bot.generateInvite(8)}) ❤`);
+        .setTitle('Invite:')
+        .setDescription(`[invite me](${await bot.generateInvite(268758038)}) ❤`);
 
     message.channel.send(invEmbed);
 };

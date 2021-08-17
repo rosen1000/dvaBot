@@ -65,4 +65,5 @@ module.exports.help = {
     type: "admin",
     desc: "Mutes user in case it spams or breaks the server rules",
     use: "mute <user> <time>",
+    intents: [Discord.Permissions.FLAGS.MANAGE_ROLES, Discord.Permissions.FLAGS.MANAGE_CHANNELS]
 };
