@@ -38,4 +38,5 @@ module.exports.help = {
     type: "admin",
     desc: "Kicks a user who is not following the rules",
     use: "kick <user> [reason]",
+    intents: [Discord.Permissions.FLAGS.KICK_MEMBERS]
 };

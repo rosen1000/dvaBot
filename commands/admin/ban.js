@@ -37,4 +37,5 @@ module.exports.help = {
     type: "admin",
     desc: "bans someone for being too bad >~<",
     use: "ban <user> [reason]",
+    intents: [Discord.Permissions.FLAGS.BAN_MEMBERS]
 };

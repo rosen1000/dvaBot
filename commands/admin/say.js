@@ -14,4 +14,5 @@ module.exports.help = {
     type: "admin",
     desc: "Make the bot to say something",
     use: "say [any text]",
+    intents: [Discord.Permissions.FLAGS.MANAGE_MESSAGES]
 };

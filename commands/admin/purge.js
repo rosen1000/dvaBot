@@ -30,4 +30,5 @@ module.exports.help = {
     type: "admin",
     desc: "Clears the chat from spam",
     use: "purge <number>",
+    intents: [Discord.Permissions.FLAGS.MANAGE_MESSAGES]
 };

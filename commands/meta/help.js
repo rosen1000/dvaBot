@@ -3,6 +3,15 @@ const botconfig = require("../../botconfig");
 const emojis = ["⏮", "◀", "▶", "⏭", "🔢"];
 const commandMap = new Map();
 const descriptionMap = new Map();
+const loadingEmbed = new Discord.MessageEmbed()
+    .setTitle("Loading help embed, please wait...")
+    .setColor("ffff00");
+
+/**
+ * @type {Map<Discord.Snowflake,NodeJS.Timeout>}
+ */
+let timer = new Map();
+let index = 0;
 
 /**
  * @param {Discord.Client} bot
@@ -12,9 +21,8 @@ const descriptionMap = new Map();
 module.exports.run = async (bot, message, args) => {
     if (args[0]) {
         let embed = new Discord.MessageEmbed();
-        let command = args[0];
-        if (bot.commands.has(command)) {
-            command = bot.commands.get(command);
+        if (bot.commands.has(args[0])) {
+            command = bot.commands.get(args[0]);
             embed.setTitle(`${command.help.name}'s help`);
             embed.addField("Description:", command.help.desc);
             embed.addField("Usage:", command.help.use);
@@ -49,19 +57,6 @@ module.exports.run = async (bot, message, args) => {
             descriptionMap.set("utility", "Some self commands");
         }
 
-        // let admin = find(bot, "admin");
-        // let anilist = find(bot, "anilist");
-        // let economy = find(bot, "economy");
-        // let fun = find(bot, "fun");
-        // let image = find(bot, "image");
-        // let meta = find(bot, "meta");
-        // let mod = find(bot, "mod");
-        // let reaction = find(bot, "reaction");
-        // let shop = find(bot, "shop");
-        // let social = find(bot, "social");
-        // let trading = find(bot, "trading");
-        // let utility = find(bot, "utility");
-
         let i = 1;
         let text = "";
         for (const cmd of commandMap) {
@@ -72,24 +67,25 @@ module.exports.run = async (bot, message, args) => {
             .setTitle("📖 Help")
             .setColor(botconfig.color)
             .addField("Categories:", text.trim());
-        let loadingEmbed = new Discord.MessageEmbed()
-            .setTitle("Loading help embed, please wait...")
-            .setColor("ffff00");
         let msg = await message.channel.send(loadingEmbed);
         for (let i = 0; i < emojis.length; i++) await msg.react(emojis[i]);
 
         const filter = (r, u) => emojis.includes(r.emoji.name) && u.id == message.author.id;
         const collector = msg.createReactionCollector(filter);
         msg.edit(embed).then(reset(collector, msg));
-        let index = 0;
 
-        let collectorHandler = async function (reactions, coll) {
-            if (coll.id != message.author.id) return;
-            if (reactions.emoji.name == emojis[0]) index = 0;
-            else if (reactions.emoji.name == emojis[1] && index > 0) index--;
-            else if (reactions.emoji.name == emojis[2] && index < commandMap.size) index++;
-            else if (reactions.emoji.name == emojis[3]) index = commandMap.size;
-            else if (reactions.emoji.name == emojis[4]) {
+        /**
+         * @param {Discord.MessageReaction} reaction
+         * @param {Discord.User} user
+         * @returns {void}
+         */
+        let collectorHandler = async function (reaction, user) {
+            if (user.id != message.author.id) return;
+            if (reaction.emoji.name == emojis[0]) index = 0;
+            else if (reaction.emoji.name == emojis[1] && index > 0) index--;
+            else if (reaction.emoji.name == emojis[2] && index < commandMap.size) index++;
+            else if (reaction.emoji.name == emojis[3]) index = commandMap.size;
+            else if (reaction.emoji.name == emojis[4]) {
                 let awaitMessage = await message.channel.send(
                     `Select page from 0 to ${commandMap.size}`
                 );
@@ -100,23 +96,27 @@ module.exports.run = async (bot, message, args) => {
                         time: 60000,
                         errors: ["time"],
                     })
-                    .then((collected) => {
+                    .then(async (collected) => {
                         let number = parseInt(collected.first().content);
                         let del = (msg) => {
                             msg.delete(3000);
                             collected.first().delete(3000);
                             awaitMessage.delete(3000);
                         };
-                        if (number == NaN)
-                            return message.channel.send("That's not a number").then(del);
-                        else if (number > commandMap.size)
-                            return message.channel
-                                .send(`Page can't be more than the maximum (${commandMap.size})`)
-                                .then(del);
-                        else if (number < 0)
-                            return message.channel
-                                .send("Page can't be less than 0 (0 for main page)")
-                                .then(del);
+                        if (number == NaN) {
+                            const msg = await message.channel.send("That's not a number");
+                            return del(msg);
+                        }
+                        if (number > commandMap.size) {
+                            const msg = await message.channel
+                                .send(`Page can't be more than the maximum (${commandMap.size})`);
+                            return del(msg);
+                        }
+                        if (number < 0) {
+                            const msg = await message.channel
+                                .send("Page can't be less than 0 (0 for main page)");
+                            return del(msg);
+                        }
 
                         index = number;
                         message.channel.send("Done!").then(del);
@@ -147,23 +147,20 @@ module.exports.run = async (bot, message, args) => {
                 return message.channel.send("Error while getting page!");
             }
             embed.setColor(botconfig.color);
-            // reactions.users.remove(message.author);
             msg.edit(embed).then((m) => reset(collector, m));
         };
-
         collector.on("collect", collectorHandler);
         collector.on("remove", collectorHandler);
     }
 };
 
-let timer = new Map();
 /**
  * @param {Discord.ReactionCollector} collector
  * @param {Discord.Message} msg
  */
 let reset = function (collector, msg) {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
+    clearTimeout(timer[msg.guild.id]);
+    timer[msg.guild.id] = setTimeout(() => {
         embed = new Discord.MessageEmbed()
             .setTitle(msg.embeds[0].title)
             .addField(msg.embeds[0].fields[0].name, msg.embeds[0].fields[0].value)
@@ -173,20 +170,7 @@ let reset = function (collector, msg) {
         collector.stop();
     }, 60000);
 };
-let find = function (bot, args) {
-    let output = [];
-    let commands = bot.commands.map((c) => c);
-    for (let i = 0; i < commands.length; i++) {
-        if (commands[i].help.type == args) {
-            output.push(commands[i].help);
-        }
-    }
-    return output;
-};
-let map = function (bot, variable) {
-    if (variable.length == 0) return "No commands found!";
-    return variable.map((cmd) => `🔲 ${cmd.name}: ${cmd.desc}`);
-};
+
 let capitalize = function (text) {
     if (text.length <= 0) return text;
     return text.charAt(0).toUpperCase() + text.substr(1);
