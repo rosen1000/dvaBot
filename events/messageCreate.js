@@ -5,7 +5,7 @@ const botconfig = require("../botconfig.json");
  * @param {Discord.Client} bot
  */
 module.exports = (bot) => {
-    bot.on("message", async (message) => {
+    bot.on("messageCreate", async (message) => {
         if (message.author.bot) return;
         if (message.channel.type === "dm") return;
 
