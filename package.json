@@ -18,5 +18,8 @@
     "dev": "node index.js --dev"
   },
   "author": "rosen1000",
-  "license": "ISC"
+  "license": "ISC",
+  "engines": {
+    "node": "16.11.0"
+  }
 }
