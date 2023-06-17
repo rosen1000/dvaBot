@@ -1,3 +1,4 @@
+//@ts-check
 const Discord = require("discord.js");
 const ms = require("ms");
 
@@ -6,11 +7,11 @@ const ms = require("ms");
  */
 module.exports = (bot) => {
     bot.once("ready", async () => {
-        console.log(`${bot.user.username} is online in ${bot.guilds.cache.size} servers ^^`);
+        console.log(`${bot.user?.username} is online in ${bot.guilds.cache.size} servers ^^`);
 
         // Load statuses and set a default one
         const statuses = require("../statuses.json");
-        bot.user.setActivity("youtube", { type: "WATCHING" });
+        bot.user?.setActivity("youtube", { type: Discord.ActivityType.Watching });
 
         setInterval(() => {
             let status,
@@ -19,7 +20,7 @@ module.exports = (bot) => {
 
             // Never have the same status twice in a row
             do status = statuses[Math.floor(Math.random() * statuses.length)];
-            while (status.status == bot.user.presence.status);
+            while (status.status == bot.user?.presence.status);
 
             // Check if the status needs to be filled with a variable
             if (regex.test(status.status)) {
@@ -35,7 +36,13 @@ module.exports = (bot) => {
                 });
             } else text = status.status;
 
-            bot.user.setActivity(text, { type: status.type });
+            let type = -1;
+            if (status.type == 'PLAYING') type = Discord.ActivityType.Playing;
+            if (status.type == 'WATCHING') type = Discord.ActivityType.Watching;
+            if (status.type == 'LISTENING') type = Discord.ActivityType.Listening;
+            if (status.type == 'STREAMING') type = Discord.ActivityType.Streaming;
+
+            bot.user?.setActivity(text, { type });
         }, ms("30m"));
     });
 };

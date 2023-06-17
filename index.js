@@ -1,6 +1,5 @@
 ﻿const Discord = require('discord.js');
-const FLAGS = Discord.Intents.FLAGS;
-const bot = new Discord.Client({ intents: [FLAGS.GUILDS, FLAGS.GUILD_MESSAGES] });
+const bot = new Discord.Client({ intents: ['Guilds', 'GuildMessages', 'GuildMessageReactions', 'GuildVoiceStates'] });
 require('dotenv').config();
 bot.commands = new Discord.Collection();
 const { loadDirectory } = require('./core/utils');

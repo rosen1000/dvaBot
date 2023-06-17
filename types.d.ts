@@ -1,15 +1,14 @@
 import Discord from 'discord.js';
 
-namespace App {
-    class Command {
-        run: (bot: Discord.Client, message: Discord.Message, args: string[]) => void;
-        help: CommandHelp;
+declare module 'discord.js' {
+    export interface Client {
+        commands: Discord.Collection<string, Command>
     }
-    interface CommandHelp {
-        name: string;
-        type: string;
-        description: string;
-        use: string;
-        intents?: Discord.PermissionFlags[]
-    }
+}
+
+class Command {
+    // exports: {
+        run: (bot: Discord.Client, message: Discord.Message, args: string[]) => any
+        help: {}
+    // }
 }
